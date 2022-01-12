@@ -36,11 +36,11 @@
                     <br>
                     <input class="form-control" type="email" name="email" placeholder="Email Address *" required>
                     <br>
-                    <input class="form-control" type="text" name="address" placeholder="Present Address" required>
+                    <input class="form-control" type="text" name="address" placeholder="Present Address *" required>
                     <br>
-                    <input class="form-control" type="password" name="password1" placeholder="Choose Password" required>
+                    <input class="form-control" type="password" name="password1" placeholder="Choose Password *" required>
                     <br>
-                    <input class="form-control" type="password" name="password" placeholder="Confirm Password" required>
+                    <input class="form-control" type="password" name="password" placeholder="Confirm Password *" required>
                     <br>
                     <input class="form-group btn btn-primary" name="signup" type="submit" value="Register">
                     <br>

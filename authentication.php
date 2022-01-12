@@ -41,7 +41,7 @@ if (isset($_POST['signup'])) {
             $sql_ins = "INSERT INTO `user` (`name`,`mobile`,`email`) VALUES ('$name','$mobile','$email')";
             if (executeQuery($conn, $sql_ins)) {
                 $uid = mysqli_insert_id($conn);
-                echo $uid;
+                // echo $uid;
                 $sql_inst = "INSERT INTO `employe` (`username`,`password`,`address`,`user_id`) VALUES ('$username','$password','$address','$uid')";
                 if (executeQuery($conn, $sql_inst)) {
                     // echo "Sign Up Success";
@@ -52,15 +52,18 @@ if (isset($_POST['signup'])) {
                 }
             } else {
                 $_SESSION['msg'] = mysqli_error($conn);
-                header('location:signup.php');
+                // header('location:signup.php');
+                echo "<script>window.location.href='signup.php' </script>";
             }
         } else {
+            echo "<script>window.location.href='signup.php' </script>";
             $_SESSION['msg'] = "Already have account!";
-            header('location:signup.php');
+            
         }
     } else {
+        echo "<script>window.location.href='signup.php' </script>";
         $_SESSION['msg'] = "Password did't match!";
-        header('location:signup.php');
+        
     }
 }
 

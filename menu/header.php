@@ -5,6 +5,9 @@ require_once "lib/db.php";
 // if (!isset($_SESSION["id"]) && !isset($_SESSION['username'])) {
 //     header("location: login.php");
 // }
+if (!isset($_SESSION["user"])) {
+    header("location: login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +86,7 @@ require_once "lib/db.php";
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Category</a>
+                        <a class="nav-link" href="manage_category.php">Category</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="employe_list.php">Employees</a>
@@ -110,13 +113,13 @@ require_once "lib/db.php";
 
 
         <?php
-        // if (isset($_GET['action'])) {
-        //     if (isset($_GET['action']) == "logout") {
-        //         session_destroy();
-        //         if (isset($_SESSION['id'])) {
-        //             echo "<script>window.location.href ='login.php';</script>";
-        //             // header("location:login.php");
-        //         }
-        //     }
-        // }
+        if (isset($_GET['action'])) {
+            if (isset($_GET['action']) == "logout") {
+                session_destroy();
+                if (isset($_SESSION['user'])) {
+                    echo "<script>window.location.href ='login.php';</script>";
+                    // header("location:login.php");
+                }
+            }
+        }
         ?>
