@@ -1,6 +1,6 @@
 <?php include_once "menu/header.php"; ?>
 <br>
-<h3 class="alert alert-primary text-center">Category</h3>
+<h3 class="alert alert-primary text-center">Manage Category</h3>
 
 <div class="container">
     <div class="parent-container d-flex">
@@ -97,9 +97,9 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <form action="actions/delete-action.php" method="post">
+                                                    <form action="actions/delete_actions.php" method="post">
                                                         <input type="text" name="cat_id" value="<?= $cat_id ?>" hidden>
-                                                        <button type="submit" class="btn btn-danger" name="delete_btn">Confirm</button>
+                                                        <button type="submit" class="btn btn-danger" name="delete_cat">Confirm</button>
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                     </form>
                                                 </div>
@@ -121,17 +121,18 @@
 
                                                     <?php
 
-                                                    $sql = "SELECT * FROM `category` WHERE `cid`='$cat_id'";
+                                                    $sqlcat = "SELECT * FROM `category` WHERE `cid`='$cat_id'";
 
-                                                    if (mysqli_num_rows(mysqli_query($conn, $sql)) == 1) {
-                                                        $data = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+                                                    if (mysqli_num_rows(mysqli_query($conn, $sqlcat)) == 1) {
+                                                        $data = mysqli_fetch_assoc(mysqli_query($conn, $sqlcat));
+                                                
 
                                                     ?>
-                                                        <form action="actions/edit_action.php" method="post">
+                                                        <form action="actions/edit_actions.php" method="post">
                                                             <div class="form-group">
                                                                 <label for="title" class="text-danger">Category Title*</label>
-                                                                <input type="hidden" class="form-control" id="" name="cid" value="<?= $data['cat_id'] ?>">
-                                                                <input type="text" class="form-control" id="" name="ctitle" value="<?= $data['cat_title'] ?>">
+                                                                <input type="hidden" class="form-control" id="" name="cid" value="<?= $data['cid'] ?>">
+                                                                <input type="text" class="form-control" id="" name="ctitle" value="<?= $data['ctitle'] ?>">
 
                                                             </div>
 
