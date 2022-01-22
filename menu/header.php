@@ -80,7 +80,7 @@ if (!isset($_SESSION["user"])) {
                             Suppliers
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Add Supplier</a>
+                            <a class="dropdown-item" href="add_supplier.php">Add Supplier</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">List of Supplier</a>
                         </div>
