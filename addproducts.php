@@ -1,9 +1,12 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-    <h3 class="alert alert-primary text-center">Add Product</h3>
+   
 
 
     <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mt-4 p-2 card">
+            <h4 class="alert alert-primary text-center">Add Product</h4>
         <form action="" method="post">
             <label for="pname" class="text-danger">Product Name *</label>
             <input class="form-control form-control-sm" type="text" name="pname" placeholder="Product Name" required>
@@ -22,21 +25,20 @@
             <input class="form-control form-control-sm" type="text" name="desc" placeholder="Description" required>
 
             <br>
-            <button class="btn btn-primary btn-sm btn-block" name="addproduct">Add Product</button>
-            <br>
+            <button class="btn btn-primary btn-block" name="addproduct">Add Product</button>
 
-            <p class="text-center text-danger">
-                <?php 
+            <?php 
                 if(isset($_SESSION['msg'])){
-                    echo $_SESSION['msg'];
+                    echo "<p class='text-center text-danger mt-4'>".$_SESSION['msg']."</p>";
                     unset($_SESSION['msg']);
                 }
                 ?>
-            </p>
         </form>
+        </div>
+        </div>  
     </div>
 </div>
-<br>
+
 <?php require_once 'menu/footer.php' ?>
 
 

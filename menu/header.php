@@ -109,7 +109,7 @@ if (!isset($_SESSION["user"])) {
         </div>
     </nav>
 
-    <div class="container-fluid border">
+    <div class="container-fluid">
 
 
         <?php

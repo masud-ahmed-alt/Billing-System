@@ -21,30 +21,53 @@
 
 <body>
     <h1 class="text-center text-white">Welcome to Billing Management System</h1>
-    <div class="container bg-light">
+    <div class="container bg-light" style="border-radius:10px">
         <br>
         <h3 class="text-center">Admin Register!</h3>
         <br>
         <div class="container">
             <div class="container text-center">
                 <form action="authentication.php" method="post">
-                    <input class="form-control" type="text" name="username" placeholder="Username *" required>
-                    <br>
-                    <input class="form-control" type="text" name="name" placeholder="Full Name *" required>
-                    <br>
-                    <input class="form-control" type="text" name="mobile" placeholder="Mobile No. *" required>
-                    <br>
-                    <input class="form-control" type="email" name="email" placeholder="Email Address *" required>
-                    <br>
-                    <input class="form-control" type="text" name="address" placeholder="Present Address *" required>
-                    <br>
-                    <input class="form-control" type="password" name="password1" placeholder="Choose Password *" required>
-                    <br>
-                    <input class="form-control" type="password" name="password" placeholder="Confirm Password *" required>
-                    <br>
-                    <input class="form-group btn btn-primary" name="signup" type="submit" value="Register">
-                    <br>
+                    <div class="row m-2">
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" name="username" placeholder="Username *" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" name="address" placeholder="Present Address *" required>
+                        </div>
+                    </div>
 
+                    <div class="row m-2">
+                        <div class="col-md-6">
+                            
+                            <input class="form-control" type="text" name="name" placeholder="Full Name *" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input class="form-control" type="password" name="password1" placeholder="Choose Password *" required>
+                            
+                        </div>
+                    </div>
+
+                    <div class="row m-2">
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" name="mobile" placeholder="Mobile No. *" required>
+                            
+                        </div>
+                        <div class="col-md-6">
+                        <input class="form-control" type="password" name="password" placeholder="Confirm Password *" required>
+                           
+                        </div>
+                    </div>
+                    <div class="row m-2">
+                        <div class="col-md-6">
+                        <input class="form-control" type="email" name="email" placeholder="Email Address *" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input class="form-group btn btn-primary btn-block" name="signup" type="submit" value="Register">
+                        </div>
+                    </div>
+                
+                
                     <a href="login.php"><p class="text-success">Already have Account? Sign In</p></a>
                     <p class="text-danger">
                         <?php 

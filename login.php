@@ -21,20 +21,20 @@ session_start();
 
 <body>
     <h1 class="text-center text-white">Welcome to Billing Management System</h1>
-    <div class="container bg-light">
+    <div class="container bg-light"  style="border-radius:10px">
         <br>
         <h1 class="text-center">Admin Login!</h1>
         <br>
         <div class="container">
             <div class="container text-center">
-                <form action="authentication.php" method="post">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                    <form action="authentication.php" method="post">
                     <input class="form-control" type="text" name="username" placeholder="Username">
-                    <br>
-                    <input class="form-control" type="password" name="password1" placeholder="Password">
                     <br>
                     <input class="form-control" type="password" name="password" placeholder="Confirm Password">
                     <br>
-                    <input class="form-group btn btn-primary" type="submit" name="login" value="Login">
+                    <input class="form-group btn btn-primary pl-3 pr-3" type="submit" name="login" value="Login">
                     <br>
 
                     <a href="signup.php"><p class="text-success">Create new Account?</p></a>
@@ -48,6 +48,9 @@ session_start();
                         ?>
                     </p>
                 </form>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
