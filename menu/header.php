@@ -83,6 +83,8 @@ if (!isset($_SESSION["user"])) {
                             <a class="dropdown-item" href="add_supplier.php">Add Supplier</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="list_suppliers.php">List of Supplier</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="supply_history.php">Supply History</a>
                         </div>
                     </li>
                     <li class="nav-item">

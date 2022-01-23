@@ -7,18 +7,46 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Items</th>
+                    <th scope="col">Desc</th>
+                    <th scope="col">Qty Availabe</th>
+                    <th scope="col">Buy Price</th>
+                    <th scope="col">Sell Price</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <?php
+                    $sql = "SELECT * FROM `products` JOIN `inventory` ON `products`.`pid`=`inventory`.`pid` ORDER BY `pname`";
+
+                    $res = mysqli_query($conn, $sql);
+
+                    if ($res) {
+                        if (mysqli_num_rows($res) > 0) {
+                            $sl = 0;
+                            while ($data = mysqli_fetch_assoc($res)) {
+                                ++$sl;
+                                $bprice=$data['buy_price'];
+                                $sprice=$data['sell_price'];
+                    ?>
+                <tr>
+                    <th scope="row"><?= $sl ?></th>
+                    <td><?= $data['pname'] ?></td>
+                    <td><?= $data['description'] ?></td>
+                    <td><?= $data['qnt_in_hand'] ?></td>
+                    <td><?= "₹" . number_format($bprice, 2) ?></td>
+                    <td><?= "₹" . number_format($sprice, 2) ?></td>
                 </tr>
+    <?php
+                            }
+                        } else {
+                            $_SESSION['msg'] = "No data found";
+                        }
+                    } else {
+                        $_SESSION['msg'] = mysqli_error($conn);
+                    }
+    ?>
+    </tr>
 
             </tbody>
         </table>
@@ -81,7 +109,7 @@
     </div>
 
 </div>
-<?php 
+<?php
 require_once 'menu/footer.php';
 require_once './functions.php';
 
@@ -95,39 +123,38 @@ if (isset($_POST['addInventory'])) {
     $count_sql = "SELECT * FROM `inventory` WHERE `pid` = '$product'";
 
     // inventory
-    
 
-    if(countRow($conn, "inventory", "`pid` = '$product'")<=0){
-        
+
+    if (countRow($conn, "inventory", "`pid` = '$product'") <= 0) {
+
         $sql = "INSERT INTO `inventory` (`pid`,`qnt_in_hand`,`sell_price`,`buy_price`) VALUES ('$product','$qty','$sprice','$bprice')";
-        if(mysqli_query($conn,$sql)){
+        if (mysqli_query($conn, $sql)) {
             $inv_id = mysqli_insert_id($conn);
             $sql_inv_s = "INSERT INTO `inv_supplier` (`supplier`,`inv_id`,`qnt`) VALUES ('$supplier','$inv_id','$qty')";
-            if(mysqli_query($conn,$sql_inv_s)){
+            if (mysqli_query($conn, $sql_inv_s)) {
                 $_SESSION['msg'] = "RECORD SAVED";
-            }else{
+            } else {
                 $_SESSION['msg'] = mysqli_error($conn);
             }
-        }else{
+        } else {
             $_SESSION['msg'] = mysqli_error($conn);
         }
-    }else{
+    } else {
         $result = mysqli_query($conn, "SELECT * FROM `inventory` WHERE `pid`='$product'");
         $data = mysqli_fetch_assoc($result);
-        $qnt_in_hand =$data['qnt_in_hand'];
+        $qnt_in_hand = $data['qnt_in_hand'];
         $inv_id = $data['iid'];
-        $qty_total = (int)$qnt_in_hand+(int)$qty;
+        $qty_total = (int)$qnt_in_hand + (int)$qty;
 
-        
-        if(mysqli_query($conn,"UPDATE `inventory` SET `qnt_in_hand`='$qty_total', `buy_price`='$bprice', `sell_price`='$sprice' WHERE `pid`='$product'")){
+
+        if (mysqli_query($conn, "UPDATE `inventory` SET `qnt_in_hand`='$qty_total', `buy_price`='$bprice', `sell_price`='$sprice' WHERE `pid`='$product'")) {
             $sql_invs = "INSERT INTO `inv_supplier` (`inv_id`, `supplier`, `qnt`) VALUES ('$inv_id', '$supplier','$qty')";
             if (mysqli_query($conn, $sql_invs)) {
                 $_SESSION['msg'] = "RECORD SAVED";
             } else {
                 $_SESSION['msg'] = mysqli_error($conn);
             }
-            
-        }else{
+        } else {
             $_SESSION['msg'] = mysqli_error($conn);
         }
     }
