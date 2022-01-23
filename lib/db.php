@@ -1,6 +1,6 @@
 <?php
 
-$conn = mysqli_connect("localhost","root","","billing_new");
+$conn = mysqli_connect("localhost","root","","selldb");
 if(mysqli_connect_errno()){
     echo mysqli_connect_errno();
 }
