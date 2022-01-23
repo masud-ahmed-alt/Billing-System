@@ -14,18 +14,12 @@
                                 <input type="submit" class="btn btn-outline-success" name="addcat" value="Add Category">
                             </div>
                         </div>
-
                     </form>
                 </div>
-
             </div>
             <br>
             <br><br>
-
-
         </div>
-
-
         <?php
 
         if (isset($_POST['addcat'])) {
@@ -47,13 +41,13 @@
         <div class="container">
             <div class="row">
                 <table class="table table-center table-sm">
-                <thead class="thead-dark">
-                            <tr class="trstick">
-                                <th scope="col">Sl No</th>
-                                <th scope="col">Category Title</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
+                    <thead class="thead-dark">
+                        <tr class="trstick">
+                            <th scope="col">Sl No</th>
+                            <th scope="col">Category Title</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
                 </table>
                 <div class="col overflow-auto" style="max-height: 60vh;">
                     <table class="table text-center table-sm">
@@ -125,7 +119,7 @@
 
                                                     if (mysqli_num_rows(mysqli_query($conn, $sqlcat)) == 1) {
                                                         $data = mysqli_fetch_assoc(mysqli_query($conn, $sqlcat));
-                                                
+
 
                                                     ?>
                                                         <form action="actions/edit_actions.php" method="post">

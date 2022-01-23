@@ -58,7 +58,7 @@ if (!isset($_SESSION["user"])) {
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="addproducts.php">Add Products</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">List of Products</a>
+                            <a class="dropdown-item" href="list_products.php">List of Products</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="manage_inventory.php">Manage Inventory</a>
                         </div>
@@ -82,7 +82,7 @@ if (!isset($_SESSION["user"])) {
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="add_supplier.php">Add Supplier</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">List of Supplier</a>
+                            <a class="dropdown-item" href="list_suppliers.php">List of Supplier</a>
                         </div>
                     </li>
                     <li class="nav-item">

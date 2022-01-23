@@ -1,6 +1,6 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-    <h3 class="text-center bg-dark text-white p-2">All Employees</h3>
+    <h3 class="text-center bg-dark text-white p-2">All Suppliers</h3>
 
 
     <div class="container">
@@ -8,8 +8,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Username</th>
+                    <th scope="col">Supplier</th>
                     <th scope="col">Email</th>
                     <th scope="col">Mobile</th>
                     <th scope="col">Address</th>
@@ -19,7 +18,7 @@
             <tbody>
 
                 <?php
-                $sql = "SELECT * FROM `employe` JOIN `user` ON `employe`.`id` = `user`.`id` ORDER BY `username`";
+                $sql = "SELECT * FROM `user` JOIN `supplier` WHERE `user`.`id`=`supplier`.`user_id` ORDER BY `name`";
                 $res = mysqli_query($conn, $sql);
 
                 if ($res) {
@@ -31,7 +30,6 @@
                             <tr>
                                 <th scope="row"><?=$sl?></th>
                                 <td><?=$data['name']?></td>
-                                <td><?=$data['username']?></td>
                                 <td><?=$data['email']?></td>
                                 <td><?=$data['mobile']?></td>
                                 <td><?=$data['address']?></td>
