@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 08, 2022 at 09:17 AM
+-- Generation Time: Jan 23, 2022 at 08:04 PM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.27
+-- PHP Version: 8.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `billing_new`
+-- Database: `selldb`
 --
 
 -- --------------------------------------------------------
@@ -31,6 +31,15 @@ CREATE TABLE `category` (
   `cid` int(11) NOT NULL,
   `ctitle` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`cid`, `ctitle`) VALUES
+(1, 'Dairy'),
+(2, 'Grocery'),
+(3, 'Perfumes');
 
 -- --------------------------------------------------------
 
@@ -46,6 +55,14 @@ CREATE TABLE `employe` (
   `address` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `employe`
+--
+
+INSERT INTO `employe` (`id`, `user_id`, `username`, `password`, `address`) VALUES
+(1, 1, 'shahid', '81dc9bdb52d04dc20036dbd8313ed055', 'Dhubri, Assam'),
+(2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Dhubri');
+
 -- --------------------------------------------------------
 
 --
@@ -60,6 +77,15 @@ CREATE TABLE `inventory` (
   `buy_price` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `inventory`
+--
+
+INSERT INTO `inventory` (`iid`, `pid`, `qnt_in_hand`, `sell_price`, `buy_price`) VALUES
+(2, 2, 895, '60', '55'),
+(3, 3, 65, '80', '70'),
+(4, 1, 75, '5500', '5000');
+
 -- --------------------------------------------------------
 
 --
@@ -68,13 +94,21 @@ CREATE TABLE `inventory` (
 
 CREATE TABLE `inv_supplier` (
   `id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
   `supplier` int(11) NOT NULL,
   `inv_id` int(11) NOT NULL,
-  `buy_price` decimal(10,0) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `qnt` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `inv_supplier`
+--
+
+INSERT INTO `inv_supplier` (`id`, `supplier`, `inv_id`, `date`, `qnt`) VALUES
+(1, 2, 2, '2022-01-22 19:34:14', 200),
+(14, 2, 2, '2022-01-23 07:24:50', 400),
+(15, 2, 2, '2022-01-23 07:39:10', 50),
+(16, 2, 3, '2022-01-23 19:03:43', 20);
 
 -- --------------------------------------------------------
 
@@ -86,9 +120,18 @@ CREATE TABLE `products` (
   `pid` int(11) NOT NULL,
   `pname` varchar(50) NOT NULL,
   `pcat` int(11) NOT NULL,
-  `barcode` int(11) NOT NULL,
+  `barcode` int(11) DEFAULT NULL,
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`pid`, `pname`, `pcat`, `barcode`, `description`) VALUES
+(1, 'LavaPhone', 1, NULL, '35g of pack'),
+(2, 'Dove Shampoo', 2, NULL, '35g of pack'),
+(3, 'Coconut Oil', 3, NULL, '100ml of bottle');
 
 -- --------------------------------------------------------
 
@@ -128,6 +171,13 @@ CREATE TABLE `supplier` (
   `address` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `supplier`
+--
+
+INSERT INTO `supplier` (`id`, `user_id`, `address`) VALUES
+(2, 5, 'Ghy');
+
 -- --------------------------------------------------------
 
 --
@@ -140,6 +190,15 @@ CREATE TABLE `user` (
   `mobile` varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `name`, `mobile`, `email`) VALUES
+(1, 'shahid siddique', '7002198549', 'shahid@gmail.com'),
+(2, 'Masud Ahmed', '9101743618', 'ma7332125@gmail.com'),
+(5, 'Surya Grocery', '9876543210', 'surya@su.com');
 
 --
 -- Indexes for dumped tables
@@ -171,7 +230,6 @@ ALTER TABLE `inventory`
 ALTER TABLE `inv_supplier`
   ADD PRIMARY KEY (`id`),
   ADD KEY `inv_id` (`inv_id`),
-  ADD KEY `product_id` (`product_id`),
   ADD KEY `supplier` (`supplier`);
 
 --
@@ -218,31 +276,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `employe`
 --
 ALTER TABLE `employe`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `iid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `inv_supplier`
 --
 ALTER TABLE `inv_supplier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sell`
@@ -260,13 +318,13 @@ ALTER TABLE `sell_product`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -288,9 +346,8 @@ ALTER TABLE `inventory`
 -- Constraints for table `inv_supplier`
 --
 ALTER TABLE `inv_supplier`
-  ADD CONSTRAINT `inv_supplier_ibfk_1` FOREIGN KEY (`inv_id`) REFERENCES `inventory` (`iid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inv_supplier_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inv_supplier_ibfk_3` FOREIGN KEY (`supplier`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `inv_supplier_fk` FOREIGN KEY (`supplier`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `inv_supplier_ibfk_1` FOREIGN KEY (`inv_id`) REFERENCES `inventory` (`iid`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `products`
