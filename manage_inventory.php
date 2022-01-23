@@ -53,9 +53,9 @@
                             <option>Select Supplier</option>
                             <option> Add new supplier</option>
                             <?php
-                            $res = mysqli_query($conn, "SELECT * FROM `supplier` JOIN `user` ON `user`.`id`=`supplier`.`user_id`");
+                            $res = mysqli_query($conn, "SELECT `supplier`.`id`,`user`.`name` FROM `supplier` JOIN `user` ON `user`.`id`=`supplier`.`user_id`");
                             while ($arr = mysqli_fetch_assoc($res)) {
-                                echo "<option value='" . $arr['user_id'] . "'>" . $arr['name'] . "</option>";
+                                echo "<option value='" . $arr['id'] . "'>" . $arr['name'] . "</option>";
                             }
                             ?>
                         </select>
@@ -81,9 +81,10 @@
     </div>
 
 </div>
-<?php require_once 'menu/footer.php' ?>
+<?php 
+require_once 'menu/footer.php';
+require_once './functions.php';
 
-<?php
 if (isset($_POST['addInventory'])) {
     $product = $_POST['product'];
     $supplier = $_POST['supplier'];
@@ -91,67 +92,46 @@ if (isset($_POST['addInventory'])) {
     $bprice = $_POST['bprice'];
     $sprice = $_POST['sprice'];
 
-    $sql = "SELECT * FROM `inventory` WHERE `pid` = '$product'";
+    $count_sql = "SELECT * FROM `inventory` WHERE `pid` = '$product'";
 
-    // print_r(mysqli_num_rows(mysqli_query($conn, $sql))).exit();
+    // inventory
+    
 
-    if (mysqli_num_rows(mysqli_query($conn, $sql)) <= 0) {
-        $sql_ins = "INSERT INTO `inventory`(`pid`, `qnt_in_hand`, `sell_price`, `buy_price`) 
-        VALUES ('$product','$qty','$sprice','$bprice')";
-
-        if (mysqli_query($conn, $sql_ins)) {
-            $iid = mysqli_insert_id($conn);
-            $_SESSION['msg'] = "Inventory Updated";
-
-
-            //TODO: insert records to inv_suppliers table
-
-            // Error Occurs here to save records of inventory history
-            $sql_supplier_record = "INSERT INTO `inv_supplier` (`product_id`, `supplier`, `inv_id`, `buy_price`, `date`, `qnt`) 
-            VALUES ('$product', '$supplier', '$iid', '$bprice', current_timestamp(), '$qty')";
-
-            if (mysqli_query($conn, $sql_supplier_record)) {
-                echo "Supply record saved";
-            } else {
-                print_r(mysqli_error($conn)) . exit();
+    if(countRow($conn, "inventory", "`pid` = '$product'")<=0){
+        
+        $sql = "INSERT INTO `inventory` (`pid`,`qnt_in_hand`,`sell_price`,`buy_price`) VALUES ('$product','$qty','$sprice','$bprice')";
+        if(mysqli_query($conn,$sql)){
+            $inv_id = mysqli_insert_id($conn);
+            $sql_inv_s = "INSERT INTO `inv_supplier` (`supplier`,`inv_id`,`qnt`) VALUES ('$supplier','$inv_id','$qty')";
+            if(mysqli_query($sql_inv_s)){
+                $_SESSION['msg'] = "RECORD SAVED";
+            }else{
+                $_SESSION['msg'] = mysqli_error($conn);
             }
-            echo "<script>window.location.href='manage_inventory.php' </script>";
-        } else {
+        }else{
             $_SESSION['msg'] = mysqli_error($conn);
         }
-    } else {
-        $qtydata = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `qnt_in_hand` FROM `inventory` WHERE `pid` = '$product'"));
-        $av_qty = $qtydata['qnt_in_hand'];
+    }else{
+        $result = mysqli_query($conn, "SELECT * FROM `inventory` WHERE `pid`='$product'");
+        $data = mysqli_fetch_assoc($result);
+        $qnt_in_hand =$data['qnt_in_hand'];
+        $inv_id = $data['iid'];
+        $qty_total = (int)$qnt_in_hand+(int)$qty;
 
-        $qty_total = $av_qty + $qty;
-
-        // print_r($qty_total).exit();
-
-        $sql_Upd = "UPDATE `inventory` SET 
-        `qnt_in_hand`='$qty_total',
-        `sell_price`='$sprice',
-        `buy_price`='$bprice' WHERE `pid` = '$product'";
-
-        if (mysqli_query($conn, $sql_Upd)) {
-            $iid = mysqli_insert_id($conn);
-            $_SESSION['msg'] = "Inventory Updated";
-            //TODO: insert records to inv_suppliers table
-
-            // Error Occurs here to save records of inventory history
-            $sql_supplier_record = "INSERT INTO `inv_supplier` (`product_id`, `supplier`, `inv_id`, `buy_price`, `date`, `qnt`) 
-            VALUES ('$product', '$supplier', '$iid', '$bprice', current_timestamp(), '$qty')";
-            // mysqli_query($conn, $sql_supplier_record);
-            if (mysqli_query($conn, $sql_supplier_record)) {
-                echo "Supply record saved";
+        
+        if(mysqli_query($conn,"UPDATE `inventory` SET `qnt_in_hand`='$qty_total', `buy_price`='$bprice', `sell_price`='$sprice' WHERE `pid`='$product'")){
+            $sql_invs = "INSERT INTO `inv_supplier` (`inv_id`, `supplier`, `qnt`) VALUES ('$inv_id', '$supplier','$qty')";
+            if (mysqli_query($conn, $sql_invs)) {
+                $_SESSION['msg'] = "RECORD SAVED";
             } else {
-                print_r(mysqli_error($conn));
+                $_SESSION['msg'] = mysqli_error($conn);
             }
-
-            echo "<script>window.location.href='manage_inventory.php' </script>";
-        } else {
+            
+        }else{
             $_SESSION['msg'] = mysqli_error($conn);
         }
     }
+    echo "<script>window.location.href='manage_inventory.php' </script>";
 }
 ?>
 
