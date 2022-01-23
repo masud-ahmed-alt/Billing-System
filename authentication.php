@@ -10,10 +10,10 @@ if (isset($_POST['login'])) {
     $sql = "SELECT * FROM `employe` WHERE `username`='$username' AND `password`='$password'";
     if (getCount($conn, $sql) > 0) {
         $_SESSION['user'] = getAllData($conn, $sql);
-        header('location:index.php'); // Don't know why you use auto_redirect.php so I redirect page myself. if not required then remove it.
+        header('location:index.php');
     } else {
         $_SESSION['msg'] = "Invalid Credentials";
-        header('location:login.php'); // Don't know why you use auto_redirect.php so I redirect page myself. if not required then remove it.
+        header('location:login.php'); 
     }
 }
 
