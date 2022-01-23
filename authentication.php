@@ -5,22 +5,15 @@ session_start();
 
 if (isset($_POST['login'])) {
     $username  = $_POST['username'];
-    $password1  = md5($_POST['password1']);
     $password  = md5($_POST['password']);
 
-    if ($password1 == $password) {
-        // print_r(mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `employe` WHERE `username`='$username' AND `password`='$password'")));
-        $sql = "SELECT * FROM `employe` WHERE `username`='$username' AND `password`='$password'";
-        if (getCount($conn, $sql) > 0) {
-            header('location:index.php'); // Don't know why you use auto_redirect.php so I redirect page myself. if not required then remove it.
-            $_SESSION['user'] = getAllData($conn, $sql);
-        } else {
-            $_SESSION['msg'] = "Invalid Credentials";
-            header('location:login.php'); // Don't know why you use auto_redirect.php so I redirect page myself. if not required then remove it.
-        }
+    $sql = "SELECT * FROM `employe` WHERE `username`='$username' AND `password`='$password'";
+    if (getCount($conn, $sql) > 0) {
+        $_SESSION['user'] = getAllData($conn, $sql);
+        header('location:index.php'); // Don't know why you use auto_redirect.php so I redirect page myself. if not required then remove it.
     } else {
-        $_SESSION['msg'] = "Password and Confirm password doesn't match";
-        header('location:login.php');
+        $_SESSION['msg'] = "Invalid Credentials";
+        header('location:login.php'); // Don't know why you use auto_redirect.php so I redirect page myself. if not required then remove it.
     }
 }
 

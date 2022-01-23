@@ -103,7 +103,7 @@ if (isset($_POST['addInventory'])) {
         if(mysqli_query($conn,$sql)){
             $inv_id = mysqli_insert_id($conn);
             $sql_inv_s = "INSERT INTO `inv_supplier` (`supplier`,`inv_id`,`qnt`) VALUES ('$supplier','$inv_id','$qty')";
-            if(mysqli_query($sql_inv_s)){
+            if(mysqli_query($conn,$sql_inv_s)){
                 $_SESSION['msg'] = "RECORD SAVED";
             }else{
                 $_SESSION['msg'] = mysqli_error($conn);
