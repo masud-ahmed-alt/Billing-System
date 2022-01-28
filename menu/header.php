@@ -49,7 +49,7 @@ if (!isset($_SESSION["user"])) {
                         <a class="nav-link" href="index.php">Dashboard <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sale</a>
+                        <a class="nav-link" href="generate_bill.php">Sale</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
