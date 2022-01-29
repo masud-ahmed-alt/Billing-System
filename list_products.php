@@ -1,6 +1,9 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-<h3 class="text-center bg-dark text-white p-2">List of Products</h3>
+<h1 class="mt-4">Product List</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">List Of Products</li>
+    </ol>
     
     <div class="container">
         <table class="table table-sm text-center">
@@ -15,7 +18,7 @@
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT * FROM `products` JOIN `category` WHERE `products`.`pid`=`category`.`cid`";
+                $sql = "SELECT * FROM `products` JOIN `category` ON `products`.`pcat`=`category`.`cid`";
                 $res = mysqli_query($conn, $sql);
                 if ($res) {
 

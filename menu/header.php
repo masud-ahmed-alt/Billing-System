@@ -1,10 +1,6 @@
 <?php
 session_start();
 require_once "lib/db.php";
-
-// if (!isset($_SESSION["id"]) && !isset($_SESSION['username'])) {
-//     header("location: login.php");
-// }
 if (!isset($_SESSION["user"])) {
     header("location: login.php");
 }
@@ -14,9 +10,12 @@ if (!isset($_SESSION["user"])) {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard - SB Admin</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -27,101 +26,147 @@ if (!isset($_SESSION["user"])) {
     <script src="assets/js/bootstrap.min.js"></script>
 
     <link href="assets/css/all.min.css" rel="stylesheet">
-    <link href="assets/css/table.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/card.css">
-    <title>Welcome to Billing Management System</title>
+    <link href="assets/css/styles.css" rel="stylesheet" />
+    <script src="assets/js/datatables-simple-demo.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/all.min.js"></script>
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light h5">
-        <h3 class="text-center text-success">
-            Billing
-        </h3>
-        <div class="container-fluid ml-4 mr-4">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="index.php">Dashboard <span class="sr-only">(current)</span></a>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="index.html">Billing Management</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <!-- <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div> -->
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#!">My Profile</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="generate_bill.php">Sale</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Product
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="addproducts.php">Add Products</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="list_products.php">List of Products</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="manage_inventory.php">Manage Inventory</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Customers
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Add Customers</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">List of Customers</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Suppliers
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="add_supplier.php">Add Supplier</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="list_suppliers.php">List of Supplier</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="supply_history.php">Supply History</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manage_category.php">Category</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="employe_list.php">Employees</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Profile
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Your Profile</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="?action=logout">Logout</a>
-                        </div>
-                    </li>
-
+                    <li><a class="dropdown-item" href="?action=logout">Logout</a></li>
                 </ul>
-
-            </div>
-        </div>
+            </li>
+        </ul>
     </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <a class="nav-link" href="index.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboard
+                        </a>
+                        <a class="nav-link" href="generate_bill.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            INVOICE
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Interface</div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Products
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="addproducts.php">Add Products</a>
+                                <a class="nav-link" href="list_products.php">List of Products</a>
+                                <a class="nav-link" href="manage_inventory.php">Inventory</a>
+                                <a class="nav-link" href="supply_history.php">History</a>
+                            </nav>
+                        </div>
 
-    <div class="container-fluid">
+
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                            Others
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                    Suppliers
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="add_supplier.php">Add Suppliers</a>
+                                        <a class="nav-link" href="list_suppliers.php">List Suppliers</a>
+
+                                    </nav>
+                                </div>
+
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                    Category
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="manage_category.php">Manage Category</a>
+                                    </nav>
+                                </div>
+
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseUsers" aria-expanded="false" aria-controls="pagesCollapseUsers">
+                                    Users
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseUsers" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="employe_list.php">Employee List</a>
+                                        <a class="nav-link" href="#">Customers List</a>
+                                    </nav>
+                                </div>
+                            </nav>
+                        </div>
+                        <div class="sb-sidenav-menu-heading">Addons</div>
+                        <a class="nav-link" href="charts.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Charts
+                        </a>
+                        <a class="nav-link" href="tables.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Tables
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logged In:</div>
+                    <?php
+                    if (isset($_SESSION['user'])) {
+                        // print_r($_SESSION['user']);
+                        $id = $_SESSION['user']['user_id'];
+                        $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `user` WHERE `id`='$id'"));
+                        echo $data['name'];
+                    }
+                    ?>
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
 
 
-        <?php
-        if (isset($_GET['action'])) {
-            if (isset($_GET['action']) == "logout") {
-                session_destroy();
-                if (isset($_SESSION['user'])) {
-                    echo "<script>window.location.href ='login.php';</script>";
-                    // header("location:login.php");
+                <?php
+                if (isset($_GET['action'])) {
+                    if (isset($_GET['action']) == "logout") {
+                        session_destroy();
+                        if (isset($_SESSION['user'])) {
+                            echo "<script>window.location.href ='login.php';</script>";
+                            // header("location:login.php");
+                        }
+                    }
                 }
-            }
-        }
-        ?>
+                ?>

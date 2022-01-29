@@ -56,12 +56,11 @@ require_once "ajax/crud.php";
                     <div class="col-sm ">
                         <span>
                             <h6 class="text-white border border-white">Hello <span id="ename" style="font-weight: bold;">
-                                    <?php $id = (int) $_SESSION['user'];
-                                    // echo $id;
-                                    // $ename = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `tbl_employee` WHERE `eid`='$id'"))['ename'];
-                                    ?>
                                     <?php
+                                    // show current employee 
                                     if (isset($_SESSION['user'])) {
+                                        // print_r($_SESSION['user']);
+                                        $id = $_SESSION['user']['user_id'];
                                         $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `user` WHERE `id`='$id'"));
                                         echo $data['name'];
                                     }
@@ -75,7 +74,7 @@ require_once "ajax/crud.php";
 
         <div class="container-fluid p-1">
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <div class="container-fluid p-2">
                         <h4 class="text-center bg-success text-light rounded">Products</h4>
 
@@ -116,16 +115,16 @@ require_once "ajax/crud.php";
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-xl">
                     <div class="container-fluid p-2">
                         <h3 class="text-center bg-success text-light">INVOICE</h3>
                         <!-- Customer Info -->
                         <form>
                             <div class="form-group-sm row">
-                                <div class="col-6">
+                                <div class="col-3">
                                     <input type="search" class="form-control form-control-sm" id="" placeholder="Customer Contact" aria-label="Search" aria-describedby="search-addon">
                                 </div>
-                                <div class="col-6">
+                                <div class="col-3   ">
                                     <input type="text" class="form-control  form-control-sm" id="" placeholder="Customer Name">
                                 </div>
                             </div>
@@ -222,90 +221,7 @@ require_once "ajax/crud.php";
 
 
             function selectProduct(id) {
-                mySessionId = "<?php echo session_id(); ?>";
-                callAjax(id, mySessionId);
             }
-
-            function callAjax(id, session_id) {
-                let url = "ajax/products.php";
-                var data = new FormData();
-                data.append('product_id', id);
-                data.append('session_id', session_id);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'ajax/products.php', true);
-                xhr.onload = function() {
-                    // console.log(JSON.parse(this.responseText));
-                    updateUI();
-
-                };
-                xhr.send(data);
-            }
-
-            function updateUI() {
-                mySessionId = "<?php echo session_id(); ?>";
-                let url = "ajax/products.php?session_id=" + mySessionId;
-                let xrh = new XMLHttpRequest();
-                xrh.open('GET', "ajax/products.php?session_id=" + mySessionId, true);
-                xrh.onload = function() {
-                    let prds = JSON.parse(this.responseText);
-                    updateToList(prds);
-                }
-                xrh.send();
-            }
-
-            function updateToList(product) {
-
-                $('#bill_items').html("");
-                let total = 0;
-                let gst = 0
-                for (let i = 0; i < product.length; i++) {
-                    total += product[i].qnt * product[i].sell_price;
-                    let pid = product[i].pid;
-                    let tr = `
-                        <tr>
-                            <th>${i+1}</th>
-                            <td>${product[i].pname}</td>
-                            <td>${product[i].description}</td>
-                            <td>${product[i].qnt}</td>
-                            <td>${product[i].sell_price}</td>
-                            <td>${product[i].qnt*product[i].sell_price}</td>
-                            <td>
-                                <button class="btn btn-sm btn-danger" onclick = "reduceQnt(${pid})">-</button>
-                            </td>
-                        </tr>
-                    
-                    `;
-                    $('#bill_items').append(tr);
-                }
-                gst = ((18 / 100) * total).toFixed(2);
-                let grandTotal = parseFloat(total) + parseFloat(gst);
-                $('#total').text(total);
-                $("#gst").text(gst);
-                $("#gross").text("₹ " + grandTotal.toFixed(2));
-
-
-            }
-
-            function reduceQnt(pid) {
-                session_id = "<?php echo session_id(); ?>";
-                let xrh = new XMLHttpRequest();
-                var data = new FormData();
-                data.append('pid', pid);
-                data.append('sid', session_id);
-                xrh.open('POST', "ajax/products.php", true);
-                xrh.onload = function() {
-                    // let prds = JSON.parse(this.responseText);
-                    // updateToList(prds);
-                    console.log(this.responseText);
-                }
-                xrh.send();
-            }
-
-            $(document).ready(function() {
-                updateUI();
-            })
-            // Hello
         </script>
 </body>
 
