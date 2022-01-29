@@ -57,6 +57,7 @@ require_once "ajax/crud.php";
                         <span>
                             <h6 class="text-white border border-white">Hello <span id="ename" style="font-weight: bold;">
                                     <?php
+                                    // show current employee 
                                     if (isset($_SESSION['user'])) {
                                         // print_r($_SESSION['user']);
                                         $id = $_SESSION['user']['user_id'];
