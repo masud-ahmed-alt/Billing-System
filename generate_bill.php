@@ -93,22 +93,22 @@ require_once "ajax/crud.php";
                                 <tbody>
                                     <?php
                                     $sql = "SELECT `products`.`pid`,`products`.`pname`, `products`.`description`, `inventory`.`sell_price` FROM `products` JOIN `inventory` ON `inventory`.`pid`=`products`.`pid`";
-                                    $res = mysqli_query($conn,$sql);
-                                    while($row=mysqli_fetch_assoc($res)){
+                                    $res = mysqli_query($conn, $sql);
+                                    while ($row = mysqli_fetch_assoc($res)) {
 
-            
+
                                     ?>
-                                    <tr>
-                                        <td><?=$row['pname']?></td>
-                                        <td><?=$row['description']?></td>
-                                        <td><?=$row['sell_price']?></td>
-                                        <td>
-                                       
-                                        <input type="hidden" name="pid" value="<?=$row['pid']?>">
-                                        <button type="button" onclick="selectProduct(<?=$row['pid']?>)" class="btn btn-sm btn-primary" > > </button>
-                                      
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td><?= $row['pname'] ?></td>
+                                            <td><?= $row['description'] ?></td>
+                                            <td><?= $row['sell_price'] ?></td>
+                                            <td>
+
+                                                <input type="hidden" name="pid" value="<?= $row['pid'] ?>">
+                                                <button type="button" onclick="selectProduct(<?= $row['pid'] ?>)" class="btn btn-sm btn-primary"> > </button>
+
+                                            </td>
+                                        </tr>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -150,17 +150,7 @@ require_once "ajax/crud.php";
                                 </tr>
                             </thead>
                             <tbody id="bill_items">
-                                <tr>
-                                    <th>1</th>
-                                    <td>Coconut Oil</td>
-                                    <td>100 ML Bottle</td>
-                                    <td>5</td>
-                                    <td>50.00</td>
-                                    <td>250.00</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-danger">-</button>
-                                    </td>
-                                </tr>
+                                <p class="text-center">No Product Selected</p>
 
                             </tbody>
                         </table>
@@ -178,8 +168,8 @@ require_once "ajax/crud.php";
                                         <p><strong>GST (18%) : ₹ </strong></p>
                                     </td>
                                     <td class="text-center text-dark">
-                                        <h5> <strong><span id="subTotal">250.00</strong></h5>
-                                        <h5> <strong><span id="taxAmount">45.00</strong></h5>
+                                        <h5> <strong><span id="total"></strong></h5>
+                                        <h5> <strong><span id="gst"></strong></h5>
                                     </td>
                                 </tr>
                                 <tr>
@@ -188,14 +178,14 @@ require_once "ajax/crud.php";
                                     <td> </td>
                                     <td> </td>
 
-                                    <td class="text-right text-dark">
-                                        <h5><strong>Gross Total: ₹ </strong></h5>
+                                    <td class="text-dark">
+                                        <h5><strong>Gross Total: </strong></h5>
                                     </td>
                                     <td class="text-center text-danger">
-                                        <h5 id="totalPayment"><strong>295.00</strong></h5>
+                                        <h5><strong id="gross"></strong></h5>
                                     </td>
-                                    <td class="text-center text-danger">
-                                        <button class="btn btn-primary col-5">CONFIRM</button>
+                                    <td class="text-danger">
+                                        <button class="btn btn-primary">CONFIRM</button>
                                     </td>
                                 </tr>
 
@@ -231,32 +221,90 @@ require_once "ajax/crud.php";
 
 
 
-            function selectProduct(id){
-                // console.log(id);
-                mySessionId= "<?php echo session_id(); ?>";
-                localStorage.setItem(mySessionId,id)
-                products.push(id);
-                updateBillItems();
+            function selectProduct(id) {
+                mySessionId = "<?php echo session_id(); ?>";
+                callAjax(id, mySessionId);
             }
 
-            function callAjax(id){
-                fetch()
-                .then(()=>{
+            function callAjax(id, session_id) {
+                let url = "ajax/products.php";
+                var data = new FormData();
+                data.append('product_id', id);
+                data.append('session_id', session_id);
 
-                }).catch(()=>{
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'ajax/products.php', true);
+                xhr.onload = function() {
+                    // console.log(JSON.parse(this.responseText));
+                    updateUI();
 
-                })
+                };
+                xhr.send(data);
             }
 
-            function updateBillItems(){
-                let up_pr = [];
-                for(let i=0; i<products.length; i++){
-                    console.log(products[i]);
-                   callAjax(products[i]);
+            function updateUI() {
+                mySessionId = "<?php echo session_id(); ?>";
+                let url = "ajax/products.php?session_id=" + mySessionId;
+                let xrh = new XMLHttpRequest();
+                xrh.open('GET', "ajax/products.php?session_id=" + mySessionId, true);
+                xrh.onload = function() {
+                    let prds = JSON.parse(this.responseText);
+                    updateToList(prds);
                 }
+                xrh.send();
             }
 
-            
+            function updateToList(product) {
+
+                $('#bill_items').html("");
+                let total = 0;
+                let gst = 0
+                for (let i = 0; i < product.length; i++) {
+                    total += product[i].qnt * product[i].sell_price;
+                    let pid = product[i].pid;
+                    let tr = `
+                        <tr>
+                            <th>${i+1}</th>
+                            <td>${product[i].pname}</td>
+                            <td>${product[i].description}</td>
+                            <td>${product[i].qnt}</td>
+                            <td>${product[i].sell_price}</td>
+                            <td>${product[i].qnt*product[i].sell_price}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick = "reduceQnt(${pid})">-</button>
+                            </td>
+                        </tr>
+                    
+                    `;
+                    $('#bill_items').append(tr);
+                }
+                gst = ((18 / 100) * total).toFixed(2);
+                let grandTotal = parseFloat(total) + parseFloat(gst);
+                $('#total').text(total);
+                $("#gst").text(gst);
+                $("#gross").text("₹ " + grandTotal.toFixed(2));
+
+
+            }
+
+            function reduceQnt(pid) {
+                session_id = "<?php echo session_id(); ?>";
+                let xrh = new XMLHttpRequest();
+                var data = new FormData();
+                data.append('pid', pid);
+                data.append('sid', session_id);
+                xrh.open('POST', "ajax/products.php", true);
+                xrh.onload = function() {
+                    // let prds = JSON.parse(this.responseText);
+                    // updateToList(prds);
+                    console.log(this.responseText);
+                }
+                xrh.send();
+            }
+
+            $(document).ready(function() {
+                updateUI();
+            })
         </script>
 </body>
 
