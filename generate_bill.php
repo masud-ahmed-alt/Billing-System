@@ -3,6 +3,8 @@ session_start();
 if (!isset($_SESSION["user"])) {
     header("location: login.php");
 }
+
+require_once "ajax/crud.php";
 ?>
 
 <!DOCTYPE html>
@@ -12,13 +14,23 @@ if (!isset($_SESSION["user"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS
+    <link href="assets/css/dataTables.bootstrap.min.css"> -->
+
+
+
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link href="assets/css/datatables.min.css">
 
     <!-- JQUERY -->
     <script src="assets/js/jquery.min.js"></script>
     <!-- BOOTSTRAP JS -->
+
+
+    <script src="assets/js/datatables.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
+
+
 
     <!-- <link href="assets/css/all.min.css" rel="stylesheet"> -->
 
@@ -44,12 +56,18 @@ if (!isset($_SESSION["user"])) {
                     <div class="col-sm ">
                         <span>
                             <h6 class="text-white border border-white">Hello <span id="ename" style="font-weight: bold;">
-                                <?php $id = (Integer) $_SESSION['user'];
-                                // echo $id;
-                                // $ename = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `tbl_employee` WHERE `eid`='$id'"))['ename'];
-                                ?>
-                                <?= (isset($_SESSION['user'])) ? '$ename' : "NA" ?>
-                        </span>!
+                                    <?php $id = (int) $_SESSION['user'];
+                                    // echo $id;
+                                    // $ename = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `tbl_employee` WHERE `eid`='$id'"))['ename'];
+                                    ?>
+                                    <?php
+                                    if (isset($_SESSION['user'])) {
+                                        $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `user` WHERE `id`='$id'"));
+                                        echo $data['name'];
+                                    }
+                                    ?>
+
+                                </span>!
                     </div>
                 </div>
             </div>
@@ -57,42 +75,61 @@ if (!isset($_SESSION["user"])) {
 
         <div class="container-fluid p-1">
             <div class="row">
-                <div class="col-3">
+                <div class="col-4">
                     <div class="container-fluid p-2">
                         <h4 class="text-center bg-success text-light rounded">Products</h4>
-                        <div class="input-group-sm rounded">
-                            <input type="search" class="form-control rounded" placeholder="Search Product" aria-label="Search" aria-describedby="search-addon" />
-                        </div>
 
-                        <table class="table table-sm table-bordered text-center">
-                            <tbody>
-                                <tr>
-                                    <td>Coconut Oil</td>
-                                    <td>100 ML Bottle</td>
-                                    <td>50.00</td>
-                                    <td class="btn btn-sm btn-primary"> > </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+
+                            <table class="table text-center" id="table_filter">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Desc</th>
+                                        <th>Price</th>
+                                        <th>Add</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT `products`.`pid`,`products`.`pname`, `products`.`description`, `inventory`.`sell_price` FROM `products` JOIN `inventory` ON `inventory`.`pid`=`products`.`pid`";
+                                    $res = mysqli_query($conn,$sql);
+                                    while($row=mysqli_fetch_assoc($res)){
+
+            
+                                    ?>
+                                    <tr>
+                                        <td><?=$row['pname']?></td>
+                                        <td><?=$row['description']?></td>
+                                        <td><?=$row['sell_price']?></td>
+                                        <td>
+                                       
+                                        <input type="hidden" name="pid" value="<?=$row['pid']?>">
+                                        <button type="button" onclick="selectProduct(<?=$row['pid']?>)" class="btn btn-sm btn-primary" > > </button>
+                                      
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+
+                        </div>
                     </div>
                 </div>
-                <div class="col-xl">
+                <div class="col-8">
                     <div class="container-fluid p-2">
-                        <h3 class="text-center bg-success text-light rounded">INVOICE</h3>
+                        <h3 class="text-center bg-success text-light">INVOICE</h3>
                         <!-- Customer Info -->
                         <form>
                             <div class="form-group-sm row">
-                                <label for="cont" class="col-sm-1 col-form-label">Contact:</label>
-                                <div class="col-5">
-                                    <input type="search" class="form-control rounded" id="" placeholder="Customer Contact" aria-label="Search" aria-describedby="search-addon">
+                                <div class="col-6">
+                                    <input type="search" class="form-control form-control-sm" id="" placeholder="Customer Contact" aria-label="Search" aria-describedby="search-addon">
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control  form-control-sm" id="" placeholder="Customer Name">
                                 </div>
                             </div>
-                            <div class="form-group-sm row">
-                                <label for="name" class="col-sm-1 col-form-label">Name:</label>
-                                <div class="col-5">
-                                    <input type="text" class="form-control rounded" id="" placeholder="Customer Name">
-                                </div>
-                            </div>
+
                         </form>
                     </div>
 
@@ -112,19 +149,19 @@ if (!isset($_SESSION["user"])) {
                                     <th scope="col">-</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="bill_items">
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <th>1</th>
                                     <td>Coconut Oil</td>
                                     <td>100 ML Bottle</td>
                                     <td>5</td>
                                     <td>50.00</td>
                                     <td>250.00</td>
                                     <td>
-                                    <button class="btn btn-sm btn-danger">-</button>
+                                        <button class="btn btn-sm btn-danger">-</button>
                                     </td>
                                 </tr>
-                            
+
                             </tbody>
                         </table>
 
@@ -150,7 +187,7 @@ if (!isset($_SESSION["user"])) {
                                     <td> </td>
                                     <td> </td>
                                     <td> </td>
-                                  
+
                                     <td class="text-right text-dark">
                                         <h5><strong>Gross Total: ₹ </strong></h5>
                                     </td>
@@ -158,7 +195,7 @@ if (!isset($_SESSION["user"])) {
                                         <h5 id="totalPayment"><strong>295.00</strong></h5>
                                     </td>
                                     <td class="text-center text-danger">
-                                       <button class="btn btn-primary col-5">CONFIRM</button>
+                                        <button class="btn btn-primary col-5">CONFIRM</button>
                                     </td>
                                 </tr>
 
@@ -176,6 +213,7 @@ if (!isset($_SESSION["user"])) {
 
         <script>
             window.onload = displayClock();
+            let products = [];
 
             function displayClock() {
                 var time = new Date().toLocaleTimeString();
@@ -186,6 +224,39 @@ if (!isset($_SESSION["user"])) {
                 var date = new Date().toDateString();
                 document.getElementById('date').innerHTML = date;
             }
+
+            $(document).ready(function() {
+                $('#table_filter').DataTable();
+            });
+
+
+
+            function selectProduct(id){
+                // console.log(id);
+                mySessionId= "<?php echo session_id(); ?>";
+                localStorage.setItem(mySessionId,id)
+                products.push(id);
+                updateBillItems();
+            }
+
+            function callAjax(id){
+                fetch()
+                .then(()=>{
+
+                }).catch(()=>{
+
+                })
+            }
+
+            function updateBillItems(){
+                let up_pr = [];
+                for(let i=0; i<products.length; i++){
+                    console.log(products[i]);
+                   callAjax(products[i]);
+                }
+            }
+
+            
         </script>
 </body>
 
