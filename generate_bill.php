@@ -305,6 +305,7 @@ require_once "ajax/crud.php";
             $(document).ready(function() {
                 updateUI();
             })
+            // Hello
         </script>
 </body>
 
