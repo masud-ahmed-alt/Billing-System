@@ -1,7 +1,13 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-    <h4 class="alert alert-primary text-center">Manage Inventory</h4>
-    <button class="btn btn-sm btn-warning text-white" data-toggle="modal" data-target="#addinventory">Add Inventory</button>
+    
+<h1 class="mt-4">Inventory</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Manage Inventory</li>
+    </ol>
+
+
+    <button class="btn btn-sm btn-warning mb-4 text-white" data-toggle="modal" data-target="#addinventory">Add Inventory</button>
     <div class="container">
         <table class="table table-sm text-center">
             <thead class="thead-dark">
@@ -134,9 +140,11 @@ if (isset($_POST['addInventory'])) {
             if (mysqli_query($conn, $sql_inv_s)) {
                 $_SESSION['msg'] = "RECORD SAVED";
             } else {
+                print_r($_SESSION['msg'] = mysqli_error($conn));
                 $_SESSION['msg'] = mysqli_error($conn);
             }
         } else {
+            print_r($_SESSION['msg'] = mysqli_error($conn));
             $_SESSION['msg'] = mysqli_error($conn);
         }
     } else {

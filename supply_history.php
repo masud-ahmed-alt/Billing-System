@@ -1,6 +1,9 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-    <h3 class="text-center bg-dark text-white p-2">Supply History</h3>
+<h1 class="mt-4">Inventory</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Supply History</li>
+    </ol>
 
 
     <div class="container">
@@ -22,7 +25,7 @@
                 <?php
                 $sql = "SELECT `products`.`pid`,`products`.`pname`,`products`.`description`,`supplier`.`id` 
                 as `sid`,`user`.`name`,`inventory`.`buy_price`,`inventory`.`sell_price`,`inv_supplier`.`date`, `inv_supplier`.`qnt` 
-                FROM `products` JOIN `inventory` ON `products`.`pid`=`inventory`.`iid` 
+                FROM `products` JOIN `inventory` ON `products`.`pid`=`inventory`.`pid` 
                 JOIN `inv_supplier` ON `inventory`.`iid`=`inv_supplier`.`inv_id` 
                 JOIN `supplier` ON `inv_supplier`.`supplier`=`supplier`.`id` 
                 JOIN `user` ON `user`.`id`=`supplier`.`user_id` ORDER BY `date`";

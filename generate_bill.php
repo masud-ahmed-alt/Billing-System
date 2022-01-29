@@ -56,12 +56,10 @@ require_once "ajax/crud.php";
                     <div class="col-sm ">
                         <span>
                             <h6 class="text-white border border-white">Hello <span id="ename" style="font-weight: bold;">
-                                    <?php $id = (int) $_SESSION['user'];
-                                    // echo $id;
-                                    // $ename = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `tbl_employee` WHERE `eid`='$id'"))['ename'];
-                                    ?>
                                     <?php
                                     if (isset($_SESSION['user'])) {
+                                        // print_r($_SESSION['user']);
+                                        $id = $_SESSION['user']['user_id'];
                                         $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `user` WHERE `id`='$id'"));
                                         echo $data['name'];
                                     }
@@ -75,7 +73,7 @@ require_once "ajax/crud.php";
 
         <div class="container-fluid p-1">
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <div class="container-fluid p-2">
                         <h4 class="text-center bg-success text-light rounded">Products</h4>
 
@@ -93,22 +91,22 @@ require_once "ajax/crud.php";
                                 <tbody>
                                     <?php
                                     $sql = "SELECT `products`.`pid`,`products`.`pname`, `products`.`description`, `inventory`.`sell_price` FROM `products` JOIN `inventory` ON `inventory`.`pid`=`products`.`pid`";
-                                    $res = mysqli_query($conn,$sql);
-                                    while($row=mysqli_fetch_assoc($res)){
+                                    $res = mysqli_query($conn, $sql);
+                                    while ($row = mysqli_fetch_assoc($res)) {
 
-            
+
                                     ?>
-                                    <tr>
-                                        <td><?=$row['pname']?></td>
-                                        <td><?=$row['description']?></td>
-                                        <td><?=$row['sell_price']?></td>
-                                        <td>
-                                       
-                                        <input type="hidden" name="pid" value="<?=$row['pid']?>">
-                                        <button type="button" onclick="selectProduct(<?=$row['pid']?>)" class="btn btn-sm btn-primary" > > </button>
-                                      
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td><?= $row['pname'] ?></td>
+                                            <td><?= $row['description'] ?></td>
+                                            <td><?= $row['sell_price'] ?></td>
+                                            <td>
+
+                                                <input type="hidden" name="pid" value="<?= $row['pid'] ?>">
+                                                <button type="button" onclick="selectProduct(<?= $row['pid'] ?>)" class="btn btn-sm btn-primary"> > </button>
+
+                                            </td>
+                                        </tr>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -116,16 +114,16 @@ require_once "ajax/crud.php";
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-xl">
                     <div class="container-fluid p-2">
                         <h3 class="text-center bg-success text-light">INVOICE</h3>
                         <!-- Customer Info -->
                         <form>
                             <div class="form-group-sm row">
-                                <div class="col-6">
+                                <div class="col-3">
                                     <input type="search" class="form-control form-control-sm" id="" placeholder="Customer Contact" aria-label="Search" aria-describedby="search-addon">
                                 </div>
-                                <div class="col-6">
+                                <div class="col-3   ">
                                     <input type="text" class="form-control  form-control-sm" id="" placeholder="Customer Name">
                                 </div>
                             </div>
@@ -231,32 +229,30 @@ require_once "ajax/crud.php";
 
 
 
-            function selectProduct(id){
+            function selectProduct(id) {
                 // console.log(id);
-                mySessionId= "<?php echo session_id(); ?>";
-                localStorage.setItem(mySessionId,id)
+                mySessionId = "<?php echo session_id(); ?>";
+                localStorage.setItem(mySessionId, id)
                 products.push(id);
                 updateBillItems();
             }
 
-            function callAjax(id){
+            function callAjax(id) {
                 fetch()
-                .then(()=>{
+                    .then(() => {
 
-                }).catch(()=>{
+                    }).catch(() => {
 
-                })
+                    })
             }
 
-            function updateBillItems(){
+            function updateBillItems() {
                 let up_pr = [];
-                for(let i=0; i<products.length; i++){
+                for (let i = 0; i < products.length; i++) {
                     console.log(products[i]);
-                   callAjax(products[i]);
+                    callAjax(products[i]);
                 }
             }
-
-            
         </script>
 </body>
 
