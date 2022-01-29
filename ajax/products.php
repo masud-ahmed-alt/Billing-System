@@ -6,7 +6,7 @@ if (isset($_POST['product_id'])) {
     $resp = [];
     $product_id = $_POST['product_id'];
     $session_id = $_POST['session_id'];
-    $sql = "SELECT * FROM `temp_product` WHERE `product_id`='$product_id'";
+    $sql = "SELECT * FROM `temp_product` WHERE `product_id`='$product_id' AND `session_id`='$session_id'";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0) {
@@ -49,6 +49,7 @@ if (isset($_GET['session_id'])) {
 }
 
 if (isset($_POST['pid']) && isset($_POST['sid'])) {
+    
     $resp = [];
     $pid = $_POST['pid'];
     $sid = $_POST['sid'];
@@ -71,4 +72,50 @@ if (isset($_POST['pid']) && isset($_POST['sid'])) {
     }
     $resp['msg'] = $_POST;
     echo json_encode($resp);
+}
+
+if(isset($_GET['contact'])){
+    $contact = $_GET['contact'];
+    $sql = "SELECT * FROM `user` WHERE `mobile`='$contact'";
+    $resp = [];
+    $resp = mysqli_fetch_all(mysqli_query($conn,$sql));
+    echo json_encode($resp);
+}
+
+if(isset($_POST['name']) && isset($_POST['mobile'])){
+    $name = $_POST['name'];
+    $mobile = $_POST['mobile'];
+    $resp = [];
+    if(mysqli_query($conn,"INSERT INTO `user` (`name`,`mobile`) VALUES('$name','$mobile')")){
+        $resp['success'] = true;
+        $resp['id'] = LAST_INSERT_ID();
+    }else{
+        $resp['success'] = false;
+    }
+    echo json_encode($resp);
+}
+
+if(isset($_POST['finalSubmit']) && isset($_POST['session_id'])){
+    $session_id = $_POST['session_id'];
+    $products = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM `temp_product` WHERE `session_id`='$session_id'"));
+    $emp_id = $_POST['emp_id'];
+    $customer = $_POST['customer'];
+    $resp = [];
+
+    if(mysqli_query($conn,"INSERT INTO `sell` (`emp`,`customer`) VALUES ('$emp_id','$customer')")){
+        $sell_id = LAST_INSERT_ID();
+        for($i=0; $i<count($products); $i++){
+            $prd = $products[0][0];
+            $qnt = $products[0][3];
+            $sql = "INSERT INTO `sell_product` (`sell_id`,`product_id`,`qnt`) VALUES ('$sell_id','$prd','$qnt')";
+            if(mysqli_query($conn,$sql)){
+                mysqli_query($conn,"DELETE FROM `temp_product` WHERE `session_id`='$session_id' AND `product_id`='$prd'");
+            }
+        }
+        $resp['success'] = true;
+        $resp['bill_id'] = $sell_id;
+
+    }else{
+        $resp['success'] = false;
+    }
 }

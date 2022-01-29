@@ -70,7 +70,7 @@ if (!isset($_SESSION["user"])) {
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
-                        <a class="nav-link" href="generate_bill.php">
+                        <a class="nav-link" href="generate_bills.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             INVOICE
                         </a>

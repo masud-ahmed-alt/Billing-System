@@ -56,12 +56,11 @@ require_once "ajax/crud.php";
                     <div class="col-sm ">
                         <span>
                             <h6 class="text-white border border-white">Hello <span id="ename" style="font-weight: bold;">
-                                    <?php $id = (int) $_SESSION['user'];
-                                    // echo $id;
-                                    // $ename = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `tbl_employee` WHERE `eid`='$id'"))['ename'];
-                                    ?>
+
                                     <?php
                                     if (isset($_SESSION['user'])) {
+                                        // print_r($_SESSION['user']);
+                                        $id = $_SESSION['user']['user_id'];
                                         $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `user` WHERE `id`='$id'"));
                                         echo $data['name'];
                                     }
@@ -75,7 +74,7 @@ require_once "ajax/crud.php";
 
         <div class="container-fluid p-1">
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <div class="container-fluid p-2">
                         <h4 class="text-center bg-success text-light rounded">Products</h4>
 
@@ -96,7 +95,6 @@ require_once "ajax/crud.php";
                                     $res = mysqli_query($conn, $sql);
                                     while ($row = mysqli_fetch_assoc($res)) {
 
-
                                     ?>
                                         <tr>
                                             <td><?= $row['pname'] ?></td>
@@ -116,82 +114,85 @@ require_once "ajax/crud.php";
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
-                    <div class="container-fluid p-2">
-                        <h3 class="text-center bg-success text-light">INVOICE</h3>
-                        <!-- Customer Info -->
-                        <form>
+                <div class="col-xl">
+                    <form>
+                        <div class="container-fluid p-2">
+                            <h3 class="text-center bg-success text-light">INVOICE</h3>
+                            <!-- Customer Info -->
+
                             <div class="form-group-sm row">
                                 <div class="col-6">
-                                    <input type="search" class="form-control form-control-sm" id="" placeholder="Customer Contact" aria-label="Search" aria-describedby="search-addon">
+                                    <input type="number" class="form-control form-control-sm" id="contact" placeholder="Customer Contact" id="contact" required onkeyup="getUser(this)">
                                 </div>
                                 <div class="col-6">
-                                    <input type="text" class="form-control  form-control-sm" id="" placeholder="Customer Name">
+                                    <input type="text" class="form-control  form-control-sm" id="cust_name" placeholder="Customer Name" required>
                                 </div>
                             </div>
 
-                        </form>
-                    </div>
+
+                        </div>
 
 
-                    <div class="container-fluid p-2">
-                        <h4 class="border-bottom">Bill</h4>
+                        <div class="container-fluid p-2">
+                            <h4 class="border-bottom">Bill</h4>
 
-                        <table class="table table-sm table-bordered text-center">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col" class="col-3">Items</th>
-                                    <th scope="col" class="col-3">Desc</th>
-                                    <th scope="col">Qtty</th>
-                                    <th scope="col">Price(₹)</th>
-                                    <th scope="col">Total(₹)</th>
-                                    <th scope="col">-</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bill_items">
-                                <p class="text-center">No Product Selected</p>
+                            <table class="table table-sm table-bordered text-center">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col" class="col-3">Items</th>
+                                        <th scope="col" class="col-3">Desc</th>
+                                        <th scope="col">Qtty</th>
+                                        <th scope="col">Price(₹)</th>
+                                        <th scope="col">Total(₹)</th>
+                                        <th scope="col">-</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bill_items">
+                                    <!-- <p class="text-center">No Product Selected</p> -->
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td class="text-right text-dark">
-                                        <h5><strong>Sub Total: ₹ </strong></h5>
-                                        <p><strong>GST (18%) : ₹ </strong></p>
-                                    </td>
-                                    <td class="text-center text-dark">
-                                        <h5> <strong><span id="total"></strong></h5>
-                                        <h5> <strong><span id="gst"></strong></h5>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td class="text-right text-dark">
+                                            <h5><strong>Sub Total: ₹ </strong></h5>
+                                            <p><strong>GST (18%) : ₹ </strong></p>
+                                        </td>
+                                        <td class="text-center text-dark">
+                                            <h5> <strong><span id="total"></strong></h5>
+                                            <h5> <strong><span id="gst"></strong></h5>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td> </td>
 
-                                    <td class="text-dark">
-                                        <h5><strong>Gross Total: </strong></h5>
-                                    </td>
-                                    <td class="text-center text-danger">
-                                        <h5><strong id="gross"></strong></h5>
-                                    </td>
-                                    <td class="text-danger">
-                                        <button class="btn btn-primary">CONFIRM</button>
-                                    </td>
-                                </tr>
+                                        <td class="text-dark">
+                                            <h5><strong>Gross Total: </strong></h5>
+                                        </td>
+                                        <td class="text-center text-danger">
+                                            <h5><strong id="gross"></strong></h5>
+                                        </td>
+                                        <td class="text-danger">
+                                            <button type="button" id="final_submit" class="btn btn-primary" onclick="finalSubmit()">CONFIRM</button>
+                                        </td>
+                                    </tr>
 
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </form>
                 </div>
 
             </div>
@@ -204,6 +205,10 @@ require_once "ajax/crud.php";
         <script>
             window.onload = displayClock();
             let products = [];
+            let total_price = 0;
+            let total_gst = 0;
+            let customer_id = null;
+            let emp = "<?= $_SESSION['user']['user_id']; ?>";
 
             function displayClock() {
                 var time = new Date().toLocaleTimeString();
@@ -222,6 +227,7 @@ require_once "ajax/crud.php";
 
 
             function selectProduct(id) {
+                // console.log(id);
                 mySessionId = "<?php echo session_id(); ?>";
                 callAjax(id, mySessionId);
             }
@@ -255,7 +261,7 @@ require_once "ajax/crud.php";
             }
 
             function updateToList(product) {
-
+                console.log(product);
                 $('#bill_items').html("");
                 let total = 0;
                 let gst = 0
@@ -268,7 +274,7 @@ require_once "ajax/crud.php";
                             <td>${product[i].pname}</td>
                             <td>${product[i].description}</td>
                             <td>${product[i].qnt}</td>
-                            <td>${product[i].sell_price}</td>
+                            <td>${(product[i].sell_price)}</td>
                             <td>${product[i].qnt*product[i].sell_price}</td>
                             <td>
                                 <button class="btn btn-sm btn-danger" onclick = "reduceQnt(${pid})">-</button>
@@ -280,14 +286,17 @@ require_once "ajax/crud.php";
                 }
                 gst = ((18 / 100) * total).toFixed(2);
                 let grandTotal = parseFloat(total) + parseFloat(gst);
-                $('#total').text(total);
+                $('#total').text(total.toFixed(2));
                 $("#gst").text(gst);
                 $("#gross").text("₹ " + grandTotal.toFixed(2));
+                total_price = total;
+                total_gst = gst;
 
 
             }
 
             function reduceQnt(pid) {
+
                 session_id = "<?php echo session_id(); ?>";
                 let xrh = new XMLHttpRequest();
                 var data = new FormData();
@@ -298,14 +307,94 @@ require_once "ajax/crud.php";
                     // let prds = JSON.parse(this.responseText);
                     // updateToList(prds);
                     console.log(this.responseText);
+                    updateUI();
                 }
-                xrh.send();
+                xrh.send(data);
+
             }
 
             $(document).ready(function() {
                 updateUI();
+
             })
-            // Hello
+
+            function getUser(data) {
+                $('#cust_name').val("")
+                let number = data.value;
+                if (number.length >= 9) {
+                    let xrh = new XMLHttpRequest();
+                    let url = "ajax/products.php?contact=" + number;
+
+                    xrh.open('GET', url, true);
+                    xrh.onload = function() {
+                        let data = JSON.parse(this.responseText)
+
+                        $('#cust_name').val(data[0][1])
+                        customer_id = data[0][0];
+
+                    }
+                    xrh.send();
+
+                }
+            }
+
+            function finalSubmit() {
+                // let products = [];
+                // let total_price = 0;
+                // let total_gst = 0;
+                // let customer_id = null;
+                let emp = "<?= $_SESSION['user']['user_id']; ?>";
+                let session_id = "<?php echo session_id(); ?>";
+                if (total_price !== 0 && total_gst != 0) {
+                    if (customer_id == null) {
+                        let contact = document.getElementById("contact").value;
+                        let cust_name = document.getElementById("cust_name").value;
+                        if (contact.length >= 10 && cust_name.length > 5) {
+                            let data = new FormData();
+                            data.append('name', cust_name);
+                            data.append('mobile', contact)
+                            let con = new FormData();
+                            con.append("finalSubmit", 1);
+                            con.append("session_id", session_id);
+                            con.append("emp_id", emp);
+                            if (addCustomer(data)) {
+                                con.append("customer", customer_id)
+                                xrh.open('POST', "ajax/products.php", true);
+                                xrh.onload = function() {
+                                    let d = JSON.parse(this.responseText);
+                                    if (d.success) {
+                                        // TODO : Print Windoe
+                                        alert("Bill Generated");
+                                    }
+                                }
+                                xrh.send(con);
+
+                            }
+                        } else {
+                            alert("Customer Information required")
+                        }
+
+                    }
+                } else {
+                    alert("Add minimum 1 product....");
+                }
+            }
+
+            function addCustomer(data) {
+
+                let xrh = new XMLHttpRequest();
+                xrh.open('POST', "ajax/products.php", true);
+                console.log(data);
+                xrh.onload = function() {
+                    let resp = JSON.parse(this.responseText);
+                    customer_id = resp.id;
+                    console.log(resp);
+                    return resp.success;
+                    // console.log();
+                }
+                xrh.send(data);
+                return false;
+            }
         </script>
 </body>
 
