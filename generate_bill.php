@@ -149,17 +149,7 @@ require_once "ajax/crud.php";
                                 </tr>
                             </thead>
                             <tbody id="bill_items">
-                                <tr>
-                                    <th>1</th>
-                                    <td>Coconut Oil</td>
-                                    <td>100 ML Bottle</td>
-                                    <td>5</td>
-                                    <td>50.00</td>
-                                    <td>250.00</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-danger">-</button>
-                                    </td>
-                                </tr>
+                                <p class="text-center">No Product Selected</p>
 
                             </tbody>
                         </table>
@@ -177,8 +167,8 @@ require_once "ajax/crud.php";
                                         <p><strong>GST (18%) : ₹ </strong></p>
                                     </td>
                                     <td class="text-center text-dark">
-                                        <h5> <strong><span id="subTotal">250.00</strong></h5>
-                                        <h5> <strong><span id="taxAmount">45.00</strong></h5>
+                                        <h5> <strong><span id="total"></strong></h5>
+                                        <h5> <strong><span id="gst"></strong></h5>
                                     </td>
                                 </tr>
                                 <tr>
@@ -187,14 +177,14 @@ require_once "ajax/crud.php";
                                     <td> </td>
                                     <td> </td>
 
-                                    <td class="text-right text-dark">
-                                        <h5><strong>Gross Total: ₹ </strong></h5>
+                                    <td class="text-dark">
+                                        <h5><strong>Gross Total: </strong></h5>
                                     </td>
                                     <td class="text-center text-danger">
-                                        <h5 id="totalPayment"><strong>295.00</strong></h5>
+                                        <h5><strong id="gross"></strong></h5>
                                     </td>
-                                    <td class="text-center text-danger">
-                                        <button class="btn btn-primary col-5">CONFIRM</button>
+                                    <td class="text-danger">
+                                        <button class="btn btn-primary">CONFIRM</button>
                                     </td>
                                 </tr>
 
@@ -231,28 +221,6 @@ require_once "ajax/crud.php";
 
 
             function selectProduct(id) {
-                // console.log(id);
-                mySessionId = "<?php echo session_id(); ?>";
-                localStorage.setItem(mySessionId, id)
-                products.push(id);
-                updateBillItems();
-            }
-
-            function callAjax(id) {
-                fetch()
-                    .then(() => {
-
-                    }).catch(() => {
-
-                    })
-            }
-
-            function updateBillItems() {
-                let up_pr = [];
-                for (let i = 0; i < products.length; i++) {
-                    console.log(products[i]);
-                    callAjax(products[i]);
-                }
             }
         </script>
 </body>
