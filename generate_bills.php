@@ -261,7 +261,7 @@ require_once "ajax/crud.php";
             }
 
             function updateToList(product) {
-                console.log(product);
+                // console.log(product);
                 $('#bill_items').html("");
                 let total = 0;
                 let gst = 0
@@ -304,9 +304,6 @@ require_once "ajax/crud.php";
                 data.append('sid', session_id);
                 xrh.open('POST', "ajax/products.php", true);
                 xrh.onload = function() {
-                    // let prds = JSON.parse(this.responseText);
-                    // updateToList(prds);
-                    console.log(this.responseText);
                     updateUI();
                 }
                 xrh.send(data);
@@ -315,7 +312,6 @@ require_once "ajax/crud.php";
 
             $(document).ready(function() {
                 updateUI();
-
             })
 
             function getUser(data) {
@@ -328,24 +324,24 @@ require_once "ajax/crud.php";
                     xrh.open('GET', url, true);
                     xrh.onload = function() {
                         let data = JSON.parse(this.responseText)
+                        if (data.length > 0) {
+                            $('#cust_name').val(data[0][1])
+                            customer_id = data[0][0];
+                        }
+                        // console.log(data.length);
 
-                        $('#cust_name').val(data[0][1])
-                        customer_id = data[0][0];
 
                     }
+
                     xrh.send();
 
                 }
             }
 
             function finalSubmit() {
-                // let products = [];
-                // let total_price = 0;
-                // let total_gst = 0;
-                // let customer_id = null;
                 let emp = "<?= $_SESSION['user']['user_id']; ?>";
                 let session_id = "<?php echo session_id(); ?>";
-                if (total_price !== 0 && total_gst != 0) {
+                if (total_price !== 0 && total_gst !== 0) {
                     if (customer_id == null) {
                         let contact = document.getElementById("contact").value;
                         let cust_name = document.getElementById("cust_name").value;
@@ -353,44 +349,64 @@ require_once "ajax/crud.php";
                             let data = new FormData();
                             data.append('name', cust_name);
                             data.append('mobile', contact)
+                            addCustomer(data);
+
+
+                        } else {
+                            alert("Customer Information required")
+                            return;
+                        }
+
+                    } else {
+                        if (customer_id == null) {
+                            alert("Customer Required");
+                            return;
+                        } else {
+                            let xrh = new XMLHttpRequest();
                             let con = new FormData();
                             con.append("finalSubmit", 1);
                             con.append("session_id", session_id);
                             con.append("emp_id", emp);
-                            if (addCustomer(data)) {
-                                con.append("customer", customer_id)
-                                xrh.open('POST', "ajax/products.php", true);
-                                xrh.onload = function() {
-                                    let d = JSON.parse(this.responseText);
-                                    if (d.success) {
-                                        // TODO : Print Windoe
-                                        alert("Bill Generated");
-                                    }
+                            con.append("customer", customer_id);
+                            con.append("total_amount", total_price);
+                            con.append("total_gst", total_gst);
+                            xrh.open('POST', "ajax/products.php", true);
+                            xrh.onload = function() {
+                                // console.log(this.responseText);
+                                let d = JSON.parse(this.responseText);
+                                if (d.success) {
+                                    alert("Bill Generated with id : " + d.bill_id);
+                                    forward(d.bill_id);
                                 }
-                                xrh.send(con);
-
                             }
-                        } else {
-                            alert("Customer Information required")
+                            xrh.send(con);
                         }
-
                     }
+
+
+
                 } else {
                     alert("Add minimum 1 product....");
                 }
+            }
+
+            function forward(bill_id){
+                window.location.href = "view_bill.php?inv_id="+bill_id;
             }
 
             function addCustomer(data) {
 
                 let xrh = new XMLHttpRequest();
                 xrh.open('POST', "ajax/products.php", true);
-                console.log(data);
                 xrh.onload = function() {
                     let resp = JSON.parse(this.responseText);
                     customer_id = resp.id;
-                    console.log(resp);
-                    return resp.success;
-                    // console.log();
+                    // console.log(resp);
+                    // if (resp.success) {
+                    //     return resp.id;
+                    // } else {
+                    //    return  null;
+                    // }
                 }
                 xrh.send(data);
                 return false;
