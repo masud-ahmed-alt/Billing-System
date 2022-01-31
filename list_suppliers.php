@@ -1,10 +1,13 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-    <h3 class="text-center bg-dark text-white p-2">All Suppliers</h3>
+    
+<h1 class="mt-4">Supplier</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">List of Suppliers</li>
+    </ol>
 
-
-    <div class="container">
-        <table class="table table-sm text-center">
+    <div class="card-body">
+        <table id="datatablesSimple" class="table table-sm">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -12,7 +15,7 @@
                     <th scope="col">Email</th>
                     <th scope="col">Mobile</th>
                     <th scope="col">Address</th>
-                    <th scope="col">Actions</th>
+                    <th class="col-2" scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>

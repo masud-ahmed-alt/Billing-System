@@ -1,15 +1,15 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-    
-<h1 class="mt-4">Inventory</h1>
+
+    <h1 class="mt-4">Inventory</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Manage Inventory</li>
     </ol>
 
 
-    <button class="btn btn-sm btn-warning mb-4 text-white" data-toggle="modal" data-target="#addinventory">Add Inventory</button>
-    <div class="container">
-        <table class="table table-sm text-center">
+    <button class="btn btn-sm btn-warning mb-4 text-white" data-toggle="modal" data-target="#invModal">Add Inventory</button>
+    <div class="card-body">
+        <table id="datatablesSimple" class="table table-sm">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -21,38 +21,48 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <?php
-                    $sql = "SELECT * FROM `products` JOIN `inventory` ON `products`.`pid`=`inventory`.`pid` ORDER BY `pname`";
 
-                    $res = mysqli_query($conn, $sql);
+                <?php
+                $sql = "SELECT * FROM `products` JOIN `inventory` ON `products`.`pid`=`inventory`.`pid` ORDER BY `pname`";
 
-                    if ($res) {
-                        if (mysqli_num_rows($res) > 0) {
-                            $sl = 0;
-                            while ($data = mysqli_fetch_assoc($res)) {
-                                ++$sl;
-                                $bprice=$data['buy_price'];
-                                $sprice=$data['sell_price'];
-                    ?>
-                <tr>
-                    <th scope="row"><?= $sl ?></th>
-                    <td><?= $data['pname'] ?></td>
-                    <td><?= $data['description'] ?></td>
-                    <td><?= $data['qnt_in_hand'] ?></td>
-                    <td><?= "₹" . number_format($bprice, 2) ?></td>
-                    <td><?= "₹" . number_format($sprice, 2) ?></td>
-                </tr>
-    <?php
-                            }
-                        } else {
-                            $_SESSION['msg'] = "No data found";
+                $res = mysqli_query($conn, $sql);
+
+                if ($res) {
+                    if (mysqli_num_rows($res) > 0) {
+                        $sl = 0;
+                        while ($data = mysqli_fetch_assoc($res)) {
+                            ++$sl;
+                            $bprice = $data['buy_price'];
+                            $sprice = $data['sell_price'];
+                ?>
+                            <tr>
+                                <th scope="row"><?= $sl ?></th>
+                                <td><?= $data['pname'] ?></td>
+
+                                <td><?= $data['description'] ?></td>
+                                <?php
+                                if ($data['qnt_in_hand'] > 20) {
+                                    echo '<td class="bg-success text-light">' . $data['qnt_in_hand'] . '</td>';
+                                }
+                                else if ($data['qnt_in_hand'] > 5) {
+                                    echo '<td class="bg-warning text-light">' . $data['qnt_in_hand'] . '</td>';
+                                }
+                                else if ($data['qnt_in_hand'] <= 5) {
+                                    echo '<td class="bg-danger text-light">' . $data['qnt_in_hand'] . '</td>';
+                                }
+                                ?>
+                                <td><?= "₹" . number_format($bprice, 2) ?></td>
+                                <td><?= "₹" . number_format($sprice, 2) ?></td>
+                            </tr>
+                <?php
                         }
                     } else {
-                        $_SESSION['msg'] = mysqli_error($conn);
+                        $_SESSION['msg'] = "No data found";
                     }
-    ?>
-    </tr>
+                } else {
+                    $_SESSION['msg'] = mysqli_error($conn);
+                }
+                ?>
 
             </tbody>
         </table>
@@ -60,7 +70,7 @@
 
 
     <!-- Modal for add inventory  -->
-    <div class="modal fade" id="addinventory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="invModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -84,8 +94,9 @@
 
                         <label for="pcat" class="text-danger">Select Supplier *</label>
                         <select class="form-control form-control-sm" name="supplier" id="supplier">
+
                             <option>Select Supplier</option>
-                            <option> Add new supplier</option>
+                            <!-- <option class="btn btn-warning" onclick="addSupp()">+Add Supplier</option> -->
                             <?php
                             $res = mysqli_query($conn, "SELECT `supplier`.`id`,`user`.`name` FROM `supplier` JOIN `user` ON `user`.`id`=`supplier`.`user_id`");
                             while ($arr = mysqli_fetch_assoc($res)) {
@@ -170,4 +181,9 @@ if (isset($_POST['addInventory'])) {
 }
 ?>
 
+
+<script>
+    function addSupp() {
+        window.location.href = 'add_supplier.php';
+    }
 </script>

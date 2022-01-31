@@ -6,7 +6,7 @@ if (isset($_GET['inv_id'])) {
 
     $sql = "SELECT `sp`.`bill_id`, `bill`.`total_amount`, `bill`.`total_gst`,
      `sp`.`product_id`,`sp`.`desc`,`sp`.`sell_price`,`user`.`id` as `user_id`, 
-     `user`.`name` as `user_name`,`user`.`email`,`user`.`mobile`,`emp`.`id` as `emp_id`, 
+     `user`.`name` as `user_name`,`user`.`email`,`user`.`mobile`,`emp`.`id` as `emp_id`,
      `products`.`pname`,`sp`.`qnt`,
      `bill`.`date` FROM `bill` JOIN `sell_product` as `sp`
       ON `sp`.`bill_id`=`bill`.`bill_id` JOIN `user` ON `user`.`id`=`bill`.`customer_id`
@@ -98,7 +98,12 @@ if (isset($_GET['inv_id'])) {
                             <h3 class="text-dark mb-1"><?= $resp[0]['user_name'] ?></h3>
                             <div><?= $resp[0]['email'] ?></div>
                             <div>Phone: <?= $resp[0]['mobile'] ?></div>
-                            <div>Saller: <?= $resp[0]['emp_id'] ?></div>
+                            <div>Saller:  <?php
+                            $emp_id = $resp[0]['emp_id'] ;
+                            $data = mysqli_fetch_assoc(mysqli_query($conn,
+                            "SELECT `user`.`name` FROM `employe` as `emp` JOIN `user` ON `emp`.`id`=`user`.`id` WHERE `emp`.`id`='$emp_id'"));
+                            echo $data['name'];
+                            ?></div>
                         </div>
 
                     </div>

@@ -1,6 +1,9 @@
 <?php require_once 'menu/header.php' ?>
 <div class="container-fluid">
-    <h3 class="alert alert-primary text-center">Add Supplier</h3>
+    <h1 class="mt-4">Supplier</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Add Supplier</li>
+    </ol>
 
 
     <div class="container">

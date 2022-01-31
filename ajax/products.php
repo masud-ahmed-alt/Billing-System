@@ -104,6 +104,7 @@ if (isset($_POST['finalSubmit']) && isset($_POST['session_id'])) {
     $total_gst = $_POST['total_gst'];
     // $resp['data'] = $products;
     $bill_id = "OD" . date('Y', time()) . time();
+    
 
     if (mysqli_query($conn, "INSERT INTO `bill` (`bill_id`,`total_amount`, `total_gst`, `customer_id`,`emp_id`) VALUES ('$bill_id','$total_amount','$total_gst','$customer','$emp_id')")) {
         for ($i = 0; $i < count($products); $i++) {
@@ -118,14 +119,25 @@ if (isset($_POST['finalSubmit']) && isset($_POST['session_id'])) {
             $sql_sell_product = "INSERT INTO `sell_product` (`bill_id`,`product_id`,`qnt`,`desc`,`sell_price`,`buy_price`) 
             VALUES ('$bill_id','$product_id','$product_qnt','$desc','$sell_price','$buy_price')";
             if (mysqli_query($conn, $sql_sell_product)) {
-                if(mysqli_query($conn,"DELETE FROM `temp_product` WHERE `session_id`='$session_id' AND `product_id`='$product_id'")){
-                    $resp['success'] = true;
-                    $resp['bill_id'] = $bill_id;
-                }else{
+                if (mysqli_query($conn, "DELETE FROM `temp_product` WHERE `session_id`='$session_id' AND `product_id`='$product_id'")) {
+                    $qnt = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `qnt_in_hand` FROM `inventory` WHERE `pid`=$product_id"))['qnt_in_hand'] - $product_qnt;
+                    if ($qnt <= 0) {
+                        $sql_up = "DELETE FROM `inventory` WHERE `pid`='$product_id'";
+                    } else {
+                        $sql_up = "UPDATE `inventory` SET `qnt_in_hand`='$qnt' WHERE `pid`='$product_id'";
+                    }
+
+                    if (mysqli_query($conn, $sql_up)) {
+                        $resp['success'] = true;
+                        $resp['bill_id'] = $bill_id;
+                    } else {
+                        $resp['success'] = true;
+                        $resp['msg'] = mysqli_error($conn);
+                    }
+                } else {
                     $resp['success'] = false;
                     $resp['msg'] = mysqli_error($conn);
                 }
-                
             } else {
                 $resp['success'] = false;
                 $resp['msg'] = mysqli_error($conn);
@@ -136,23 +148,12 @@ if (isset($_POST['finalSubmit']) && isset($_POST['session_id'])) {
         $resp['msg'] = mysqli_error($conn);
     }
 
-    // if(mysqli_query($conn,"INSERT INTO `sell` (`emp`,`customer`) VALUES ('$emp_id','$customer')")){
-    //     $sell_id = mysqli_insert_id($conn);
-    //     print_r(count($products));exit();
-    //     for($i=0; $i<count($products); $i++){
-    //         $prd = $products[0][1];
-    //         $qnt = $products[0][3];
-    //         $session = $products[0][2];
-    //         $sql = "INSERT INTO `sell_product` (`sell_id`,`product_id`,`qnt`,`session_id`) VALUES ('$sell_id','$prd','$qnt','$session')";
-    //         if(mysqli_query($conn,$sql)){
-    //             mysqli_query($conn,"DELETE FROM `temp_product` WHERE `session_id`='$session_id' AND `product_id`='$prd'");
-    //         }
-    //     }
-    //     $resp['success'] = true;
-    //     $resp['bill_id'] = $sell_id;
-
-    // }else{
-    //     $resp['success'] = false;
-    // }
     echo json_encode($resp);
+}
+
+if (isset($_GET['reset_session'])) {
+    $session_id = $_GET['reset_session'];
+    $sql = "DELETE FROM `temp_product` WHERE `session_id`='$session_id'";
+    mysqli_query($conn, $sql);
+    echo "<script>window.location.href = '../generate_bills.php'</script>";
 }

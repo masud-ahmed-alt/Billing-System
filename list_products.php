@@ -5,15 +5,15 @@
         <li class="breadcrumb-item active">List Of Products</li>
     </ol>
     
-    <div class="container">
-        <table class="table table-sm text-center">
+    <div class="card-body">
+        <table id="datatablesSimple" class="table table-sm">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">#</th>
+                    <th  scope="col">#</th>
                     <th scope="col">Items</th>
                     <th scope="col">Category</th>
                     <th scope="col">Desc</th>
-                    <th scope="col">Actions</th>
+                    <th class="col-2">Actions</th>
                 </tr>
             </thead>
             <tbody>

@@ -13,24 +13,24 @@ if (!isset($_SESSION["user"])) {
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
     <title>Billing Dashboard</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link href="assets/css/styles.css" rel="stylesheet" />
 
     <!-- JQUERY -->
     <script src="assets/js/jquery.min.js"></script>
     <!-- BOOTSTRAP JS -->
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-
-    <link href="assets/css/all.min.css" rel="stylesheet">
-
-    <link href="assets/css/styles.css" rel="stylesheet" />
-    <script src="assets/js/datatables-simple-demo.js"></script>
-    <script src="assets/js/scripts.js"></script>
+    
     <script src="assets/js/all.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/datatables-simple-demo.js"></script>
+  
+
 </head>
 
 <body class="sb-nav-fixed">
@@ -65,7 +65,7 @@ if (!isset($_SESSION["user"])) {
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <div class="sb-sidenav-menu-heading">Manage Invoice</div>
                         <a class="nav-link" href="index.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
@@ -78,7 +78,7 @@ if (!isset($_SESSION["user"])) {
                             <div class="sb-nav-link-icon"><i class="fas fa-file-invoice-dollar"></i></i></div>
                             Sales History
                         </a>
-                        <div class="sb-sidenav-menu-heading">Interface</div>
+                        <div class="sb-sidenav-menu-heading">Other Modules</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-cart-plus"></i></div>
                             Products
@@ -130,12 +130,12 @@ if (!isset($_SESSION["user"])) {
                                 <div class="collapse" id="pagesCollapseUsers" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="employe_list.php">Employee List</a>
-                                        <a class="nav-link" href="#">Customers List</a>
+                                        <a class="nav-link" href="customer_list.php">Customers List</a>
                                     </nav>
                                 </div>
                             </nav>
                         </div>
-                        <div class="sb-sidenav-menu-heading">Addons</div>
+                        <!-- <div class="sb-sidenav-menu-heading">Addons</div>
                         <a class="nav-link" href="charts.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Charts
@@ -143,7 +143,7 @@ if (!isset($_SESSION["user"])) {
                         <a class="nav-link" href="tables.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Tables
-                        </a>
+                        </a> -->
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -162,12 +162,12 @@ if (!isset($_SESSION["user"])) {
         <div id="layoutSidenav_content">
             <main>
 
-
                 <?php
                 if (isset($_GET['action'])) {
                     if (isset($_GET['action']) == "logout") {
                         session_destroy();
                         if (isset($_SESSION['user'])) {
+                            mysqli_close($conn);
                             echo "<script>window.location.href ='login.php';</script>";
                             // header("location:login.php");
                         }
