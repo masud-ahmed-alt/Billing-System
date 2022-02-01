@@ -14,7 +14,6 @@
                             <th scope="col">#</th>
                             <th scope="col">Customer Name</th>
                             <th scope="col">Phone Number</th>
-                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,19 +26,18 @@
                                 $sl = 0;
                                 while ($data = mysqli_fetch_assoc($res)) {
                                     ++$sl;
+                                    $cid = $data['id'];
                                     $cname = $data['name'];
                                     $phone = $data['mobile'];
-                       
+
                         ?>
                                     <tr>
                                         <th scope="row"><?= $sl ?></th>
                                         <td><?= $cname ?></td>
                                         <td><?= $phone ?></td>
-                                     
-                                        <td>
-                                            <a href="view_bill.php?inv_id=<?= $bill_no ?>" class="btn btn-sm btn-danger">Delete</a>
-                                        </td>
                                     </tr>
+
+                                  
                         <?php
                                 }
                             } else {

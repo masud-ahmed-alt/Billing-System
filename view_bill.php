@@ -186,7 +186,10 @@ if (isset($_GET['inv_id'])) {
                 </div>
 
                 <div class="float-right pl-5">
-                    <a href="generate_bills.php" class="btn btn-info" id="">Dashboard</a>
+                    <a href="generate_bills.php" class="btn btn-info" id="">New Bill</a>
+                </div>
+                <div class="float-right pl-5">
+                    <a href="sales_history.php" class="btn btn-info" id="">View Bills</a>
                 </div>
             </div>
 

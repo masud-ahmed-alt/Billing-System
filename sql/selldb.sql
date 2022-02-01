@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2022 at 04:53 PM
+-- Generation Time: Feb 01, 2022 at 12:26 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -47,6 +47,16 @@ CREATE TABLE `category` (
   `ctitle` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`cid`, `ctitle`) VALUES
+(8, 'Dairy'),
+(9, 'Beauty'),
+(10, 'Cosmetics'),
+(11, 'Grocery');
+
 -- --------------------------------------------------------
 
 --
@@ -58,15 +68,16 @@ CREATE TABLE `employe` (
   `user_id` int(11) NOT NULL,
   `username` varchar(10) NOT NULL,
   `password` text NOT NULL,
-  `address` text NOT NULL
+  `address` text NOT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `employe`
 --
 
-INSERT INTO `employe` (`id`, `user_id`, `username`, `password`, `address`) VALUES
-(2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Dhubri');
+INSERT INTO `employe` (`id`, `user_id`, `username`, `password`, `address`, `image`) VALUES
+(2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Dhubri', '1643700689profile.jpg');
 
 -- --------------------------------------------------------
 
@@ -82,6 +93,14 @@ CREATE TABLE `inventory` (
   `buy_price` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `inventory`
+--
+
+INSERT INTO `inventory` (`iid`, `pid`, `qnt_in_hand`, `sell_price`, `buy_price`) VALUES
+(11, 7, 20, '220', '180'),
+(12, 8, 22, '60', '50');
+
 -- --------------------------------------------------------
 
 --
@@ -96,6 +115,14 @@ CREATE TABLE `inv_supplier` (
   `qnt` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `inv_supplier`
+--
+
+INSERT INTO `inv_supplier` (`id`, `supplier`, `inv_id`, `date`, `qnt`) VALUES
+(24, 4, 11, '2022-02-01 11:08:41', 20),
+(25, 4, 12, '2022-02-01 11:09:14', 22);
+
 -- --------------------------------------------------------
 
 --
@@ -109,6 +136,14 @@ CREATE TABLE `products` (
   `barcode` int(11) DEFAULT NULL,
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`pid`, `pname`, `pcat`, `barcode`, `description`) VALUES
+(7, 'Mustured Oil', 11, NULL, '1L Fortune'),
+(8, 'Coconut Oil', 9, NULL, '100g Parachut');
 
 -- --------------------------------------------------------
 
@@ -142,8 +177,8 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`id`, `user_id`, `address`) VALUES
-(2, 5, 'Ghy'),
-(3, 13, 'Guwahati');
+(4, 18, 'Guwahati'),
+(5, 19, 'Dhubri');
 
 -- --------------------------------------------------------
 
@@ -177,8 +212,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `name`, `mobile`, `email`) VALUES
 (2, 'Masud Ahmed', '9101743618', 'ma7332125@gmail.com'),
-(5, 'Surya Grocery', '9876543210', 'surya@su.com'),
-(13, 'JDB Store', '9876543215', 'jdb@jdb.com');
+(18, 'Surya Grocery', '9876543210', 'surya@surya.com'),
+(19, 'JDB Store', '9876543211', 'jdb@jdb.com');
 
 --
 -- Indexes for dumped tables
@@ -190,7 +225,7 @@ INSERT INTO `user` (`id`, `name`, `mobile`, `email`) VALUES
 ALTER TABLE `bill`
   ADD PRIMARY KEY (`bill_id`),
   ADD KEY `bill_ibfk_1` (`emp_id`),
-  ADD KEY `customer_id` (`customer_id`);
+  ADD KEY `bill_ibfk_2` (`customer_id`);
 
 --
 -- Indexes for table `category`
@@ -261,49 +296,49 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `employe`
 --
 ALTER TABLE `employe`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `iid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `iid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `inv_supplier`
 --
 ALTER TABLE `inv_supplier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `temp_product`
 --
 ALTER TABLE `temp_product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
@@ -332,8 +367,8 @@ ALTER TABLE `inventory`
 -- Constraints for table `inv_supplier`
 --
 ALTER TABLE `inv_supplier`
-  ADD CONSTRAINT `inv_supplier_fk` FOREIGN KEY (`supplier`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `inv_supplier_ibfk_1` FOREIGN KEY (`inv_id`) REFERENCES `inventory` (`iid`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `inv_supplier_fk` FOREIGN KEY (`supplier`) REFERENCES `supplier` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `inv_supplier_ibfk_1` FOREIGN KEY (`inv_id`) REFERENCES `inventory` (`iid`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `products`

@@ -1,10 +1,10 @@
 <?php require_once 'menu/header.php' ?>
-<script src="assets/js/datatables-simple-demo.js"></script>
+<script src="assets/js/Chart.js">
+</script>
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
+
+    <!-- First rows of cards  -->
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
@@ -67,74 +67,82 @@
             </div>
         </div>
     </div>
+
+    <!-- Second rows of Cards  -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body"><strong>Gross Sale</strong></div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <h1 class="text-white">
+                        <?php
+                        $sql = "SELECT SUM(`total_amount`) as `sell_total`, SUM(`total_gst`) as `gst_total` FROM `bill`";
+                        $data =  mysqli_fetch_array(mysqli_query($conn, $sql));
+                        echo "₹ " . number_format($data[0], 2);
+                        ?>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body"><strong>Gross GST</strong></div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <h1 class="text-white">
+                        <?php
+                        $sql = "SELECT SUM(`total_amount`) as `sell_total`, SUM(`total_gst`) as `gst_total` FROM `bill`";
+                        $data =  mysqli_fetch_array(mysqli_query($conn, $sql));
+                        echo "₹ " . number_format($data[1], 2);
+                        ?>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-dark text-white mb-4">
+                <div class="card-body"><strong>Overal Profit</strong></div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <h1 class="text-white">
+                        <?php
+                        $sql = "SELECT  SUM(`buy_price`*`qnt`) as `bprice`, SUM(`sell_price`*`qnt`) as `sprice` FROM `sell_product`";
+                        $data =  mysqli_fetch_array(mysqli_query($conn, $sql));
+                        $bprice = $data[0];
+                        $sprice = $data[1];
+
+                        $profit = $sprice-$bprice;
+                        echo "₹ " . number_format($profit, 2);
+                        ?>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="row">
         <div class="col-xl-6">
 
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-area me-1"></i>
-                    Sales Per months
-
-
-
+                    Daily Profit Chart!
                 </div>
-                <div class="card-body">
-                    <canvas id="myAreaChart" width="100%" height="40"></canvas>
+                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas>
                 </div>
             </div>
         </div>
+        <script src="assets/js/chart-area-demo.js"></script>
         <div class="col-xl-6">
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-bar me-1"></i>
-                    Bar Chart Example
+                    Sale and Buy Price Ratio per months!
                 </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40">
-
-
-                    </canvas></div>
+                <div class="card-body"><canvas id="profit_barChart" width="100%" height="40"></canvas></div>
             </div>
         </div>
     </div>
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Recent Sales
-        </div>
-        <div class="card-body">
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
-                    </tr>
-                </tfoot>
-                <tbody>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <script src="assets/js/chart-bar-demo.js"></script>
 </div>
 <?php require_once 'menu/footer.php' ?>

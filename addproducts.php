@@ -1,8 +1,7 @@
-<?php require_once 'menu/header.php' ?>
+<?php 
+require_once 'menu/header.php' 
+?>
 <div class="container-fluid">
-   
-
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 mt-4 p-2 card">

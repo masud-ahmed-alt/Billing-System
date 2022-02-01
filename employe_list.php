@@ -19,13 +19,12 @@
                             <th scope="col">Email</th>
                             <th scope="col">Mobile</th>
                             <th scope="col">Address</th>
-                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         <?php
-                        $sql = "SELECT * FROM `employe` JOIN `user` ON `employe`.`id` = `user`.`id` ORDER BY `username`";
+                        $sql = "SELECT * FROM `employe` JOIN `user` ON `employe`.`user_id` = `user`.`id` ORDER BY `username`";
                         $res = mysqli_query($conn, $sql);
 
                         if ($res) {
@@ -41,11 +40,6 @@
                                         <td><?= $data['email'] ?></td>
                                         <td><?= $data['mobile'] ?></td>
                                         <td><?= $data['address'] ?></td>
-                                        <td>
-                                            <button class="btn-sm btn-primary">Edit</button>
-                                            <button class="btn-sm btn-danger">Delete</button>
-                                        </td>
-
                                     </tr>
                         <?php
                                 }
