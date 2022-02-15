@@ -12,19 +12,23 @@ xrh.onload = function () {
   let buy = [];
   let sell = [];
   let month = [];
+  console.log(data);
   for (let i = 0; i < data.length; i++) {
-    buy.push(data[i][1]*data[i][2]);
+    
+    buy.push(data[i][1]);
     sell.push(data[i][0]);
     month.push(data[i][3]);
   }
   let max = sell.reduce(function (a, b) {
     return Math.max(a, b);
   }, 0);
+  console.log(sell);
+  console.log(buy);
  
   var myLineChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: month.reverse(),
+      labels: month,
       datasets: [{
         label: "Sell Price",
         backgroundColor: "rgba(2,117,216,1)",

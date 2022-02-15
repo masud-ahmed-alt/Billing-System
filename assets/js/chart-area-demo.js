@@ -10,6 +10,7 @@ let date = [];
 let profit = [];
 xrh2.open('GET', 'ajax/chart.php?daily=1', true);
 xrh2.onload = function () {
+  console.log(this.responseText);
   let data = JSON.parse(this.responseText);
   for (let i = 0; i < data.length; i++) {
     date.push(data[i][2]);
@@ -25,7 +26,7 @@ xrh2.onload = function () {
   var chartArea = new Chart(ctx2, {
     type: 'line',
     data: {
-      labels: date.reverse(),
+      labels: date,
       datasets: [{
         label: "Profit",
         lineTension: 0.3,

@@ -2,7 +2,7 @@
 session_start();
 require_once "lib/db.php";
 if (!isset($_SESSION["user"])) {
-    header("location: login.php");
+    echo "<script>window.location.href='login.php'</script>";
 }
 ?>
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2022 at 01:55 PM
+-- Generation Time: Feb 03, 2022 at 11:16 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -42,8 +42,9 @@ CREATE TABLE `bill` (
 
 INSERT INTO `bill` (`bill_id`, `total_amount`, `total_gst`, `customer_id`, `emp_id`, `date`) VALUES
 ('OD20221643719808', '1000', '180', 20, 2, '2022-02-01 18:20:08'),
-('OD20221643719850', '120', '22', 20, 2, '2022-02-01 18:20:50'),
-('OD20221643719877', '560', '101', 21, 2, '2022-02-01 18:21:17');
+('OD20221643719850', '120', '22', 20, 2, '2021-12-08 18:20:50'),
+('OD20221643719877', '560', '101', 21, 2, '2022-02-01 18:21:17'),
+('OD20221643733901', '120', '22', 21, 2, '2022-01-01 22:15:01');
 
 -- --------------------------------------------------------
 
@@ -109,7 +110,7 @@ CREATE TABLE `inventory` (
 
 INSERT INTO `inventory` (`iid`, `pid`, `qnt_in_hand`, `sell_price`, `buy_price`) VALUES
 (11, 7, 16, '220', '180'),
-(12, 8, 17, '60', '50'),
+(12, 8, 15, '60', '50'),
 (13, 9, 6, '250', '210');
 
 -- --------------------------------------------------------
@@ -183,7 +184,8 @@ INSERT INTO `sell_product` (`bill_id`, `product_id`, `qnt`, `desc`, `sell_price`
 ('OD20221643719808', '9', 2, '500g Packet.', '250', '210'),
 ('OD20221643719850', '8', 2, '100g Parachut', '60', '50'),
 ('OD20221643719877', '7', 2, '1L Fortune', '220', '180'),
-('OD20221643719877', '8', 2, '100g Parachut', '60', '50');
+('OD20221643719877', '8', 2, '100g Parachut', '60', '50'),
+('OD20221643733901', '8', 2, '100g Parachut', '60', '50');
 
 -- --------------------------------------------------------
 
@@ -359,7 +361,7 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `temp_product`
 --
 ALTER TABLE `temp_product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `user`

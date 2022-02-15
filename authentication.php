@@ -3,6 +3,8 @@ require_once "lib/db.php";
 require_once "lib/auto_redirect.php";
 session_start();
 
+
+
 if (isset($_POST['login'])) {
     $username  = $_POST['username'];
     $password  = md5($_POST['password']);
@@ -10,12 +12,16 @@ if (isset($_POST['login'])) {
     $sql = "SELECT * FROM `employe` WHERE `username`='$username' AND `password`='$password'";
     if (getCount($conn, $sql) > 0) {
         $_SESSION['user'] = getAllData($conn, $sql);
-        header('location:index.php');
+        // header('location:index.php');
+        echo "<script>window.location.href='index.php'</script>";
     } else {
         $_SESSION['msg'] = "Invalid Credentials";
-        header('location:login.php'); 
+        // header('location:login.php'); 
+        echo "<script>window.location.href='login.php'</script>";
     }
 }
+
+// Sign Up Admin 
 
 if (isset($_POST['signup'])) {
     $username  = $_POST['username'];
@@ -27,8 +33,7 @@ if (isset($_POST['signup'])) {
     $password  = md5($_POST['password']);
 
     if ($password1 == $password) {
-        // print_r(mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `employe` WHERE `username`='$username' AND `password`='$password'")));
-
+ 
         $sql = "SELECT * FROM `employe` JOIN `user` WHERE `employe`.`user_id`=`user`.`id` AND `employe`.`username`='$username' OR `user`.`email`='$email'";
         if (getCount($conn, $sql) <= 0) {
             $sql_ins = "INSERT INTO `user` (`name`,`mobile`,`email`) VALUES ('$name','$mobile','$email')";
