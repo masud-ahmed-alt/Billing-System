@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 03, 2022 at 11:16 AM
+-- Generation Time: Feb 22, 2022 at 07:12 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -36,16 +36,6 @@ CREATE TABLE `bill` (
   `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `bill`
---
-
-INSERT INTO `bill` (`bill_id`, `total_amount`, `total_gst`, `customer_id`, `emp_id`, `date`) VALUES
-('OD20221643719808', '1000', '180', 20, 2, '2022-02-01 18:20:08'),
-('OD20221643719850', '120', '22', 20, 2, '2021-12-08 18:20:50'),
-('OD20221643719877', '560', '101', 21, 2, '2022-02-01 18:21:17'),
-('OD20221643733901', '120', '22', 21, 2, '2022-01-01 22:15:01');
-
 -- --------------------------------------------------------
 
 --
@@ -66,7 +56,8 @@ INSERT INTO `category` (`cid`, `ctitle`) VALUES
 (9, 'Beauty'),
 (10, 'Cosmetics'),
 (11, 'Grocery'),
-(12, 'Dry Food');
+(12, 'Dry Food'),
+(13, 'Phone');
 
 -- --------------------------------------------------------
 
@@ -88,7 +79,7 @@ CREATE TABLE `employe` (
 --
 
 INSERT INTO `employe` (`id`, `user_id`, `username`, `password`, `address`, `image`) VALUES
-(2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Dhubri', '1643700689profile.jpg');
+(2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Dhubri', '1644087671OIP (1).jpg');
 
 -- --------------------------------------------------------
 
@@ -109,9 +100,10 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`iid`, `pid`, `qnt_in_hand`, `sell_price`, `buy_price`) VALUES
-(11, 7, 16, '220', '180'),
-(12, 8, 15, '60', '50'),
-(13, 9, 6, '250', '210');
+(11, 7, 4, '220', '180'),
+(12, 8, 10, '60', '55'),
+(13, 9, 13, '210', '200'),
+(14, 10, 50, '130', '100');
 
 -- --------------------------------------------------------
 
@@ -126,15 +118,6 @@ CREATE TABLE `inv_supplier` (
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `qnt` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `inv_supplier`
---
-
-INSERT INTO `inv_supplier` (`id`, `supplier`, `inv_id`, `date`, `qnt`) VALUES
-(24, 4, 11, '2022-02-01 11:08:41', 20),
-(25, 4, 12, '2022-02-01 11:09:14', 22),
-(26, 5, 13, '2022-02-01 12:49:35', 8);
 
 -- --------------------------------------------------------
 
@@ -157,7 +140,8 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`pid`, `pname`, `pcat`, `barcode`, `description`) VALUES
 (7, 'Mustured Oil', 11, NULL, '1L Fortune'),
 (8, 'Coconut Oil', 9, NULL, '100g Parachut'),
-(9, 'Arabian Dates', 12, NULL, '500g Packet.');
+(9, 'Arabian Dates', 12, NULL, '500g Packet.'),
+(10, 'oil', 9, NULL, '100ml of bottle');
 
 -- --------------------------------------------------------
 
@@ -173,19 +157,6 @@ CREATE TABLE `sell_product` (
   `sell_price` decimal(10,0) NOT NULL,
   `buy_price` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `sell_product`
---
-
-INSERT INTO `sell_product` (`bill_id`, `product_id`, `qnt`, `desc`, `sell_price`, `buy_price`) VALUES
-('OD20221643719808', '7', 2, '1L Fortune', '220', '180'),
-('OD20221643719808', '8', 1, '100g Parachut', '60', '50'),
-('OD20221643719808', '9', 2, '500g Packet.', '250', '210'),
-('OD20221643719850', '8', 2, '100g Parachut', '60', '50'),
-('OD20221643719877', '7', 2, '1L Fortune', '220', '180'),
-('OD20221643719877', '8', 2, '100g Parachut', '60', '50'),
-('OD20221643733901', '8', 2, '100g Parachut', '60', '50');
 
 -- --------------------------------------------------------
 
@@ -238,11 +209,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `mobile`, `email`) VALUES
-(2, 'Masud Ahmed', '9101743618', 'ma7332125@gmail.com'),
+(2, 'Masud Ahmed', '9876543210', 'abc@abc.com'),
 (18, 'Surya Grocery', '9876543210', 'surya@surya.com'),
-(19, 'JDB Store', '9876543211', 'jdb@jdb.com'),
-(20, 'M Ahmed', '7896132067', NULL),
-(21, 'Inzamul Hoque', '8822915901', NULL);
+(19, 'JDB Store', '9876543211', 'jdb@jdb.com');
 
 --
 -- Indexes for dumped tables
@@ -325,31 +294,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `employe`
 --
 ALTER TABLE `employe`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `iid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `iid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `inv_supplier`
 --
 ALTER TABLE `inv_supplier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -361,13 +330,13 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `temp_product`
 --
 ALTER TABLE `temp_product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables
